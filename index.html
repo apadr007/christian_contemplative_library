@@ -255,7 +255,7 @@
   <p class="subtitle">A Digital Exhibition of Christian Contemplative Pointers</p>
   <button class="intro-toggle-btn" onclick="toggleIntro()">Read Introduction</button>
   <div id="intro-box">
-    This digital exhibition gathers thirty contemplative "shewings" from across the Christian tradition — pointers not to miraculous external events, but to the most radical claim of Christian mysticism: that the living God indwells the human soul, and that this indwelling can be consciously entered. Click any entry to open the full record, with its narrative, key quotes, Scripture reference, and a contemplative practice.
+    This digital exhibition gathers one hundred contemplative pointers from across the Christian tradition — from the Hebrew prophets to the 21st century — each pointing to the most radical claim of Christian mysticism: that the living God indwells the human soul, and that this indwelling can be consciously entered. Click any entry to open the full record, with its narrative, key quotes, Scripture reference, and a contemplative practice.
   </div>
 </header>
 
@@ -279,7 +279,7 @@
 
 <footer>
   <div class="f-cross">✦</div>
-  <div>Thirty Contemplative Pointers to the Indwelling God</div>
+  <div>One Hundred Contemplative Pointers to the Indwelling God</div>
   <div style="margin-top:0.3rem;opacity:0.55;font-size:0.72rem">In the spirit of Bl. Carlo Acutis, whose life was an exhibition of divine love</div>
 </footer>
 
@@ -307,6 +307,9 @@
   </div>
 </div>
 
+<script src="entries-31-60.js"></script>
+<script src="entries-61-90.js"></script>
+<script src="entries-91-100.js"></script>
 <script>
 const CATS = {
   scripture:  { label: 'Sacred Scripture',          icon: '✦', color: '#C9A84C' },
@@ -316,7 +319,7 @@ const CATS = {
   modern:     { label: 'Modern Contemplatives',      icon: '◎', color: '#4E8A70' },
 };
 
-const ENTRIES = [
+var ENTRIES = [
   { id:1, cat:'scripture', title:'The Still Small Voice', era:'c. 850 BC — The Prophet Elijah',
     narrative:'Exhausted and fleeing into the desert, Elijah encounters God not in wind, earthquake, or fire — the spectacular theophanies of his tradition — but in what the Hebrew calls a qol demamah daqah: a thin, silent sound. The tradition has long wrestled with this phrase. Is it sound or silence? God\'s indwelling does not announce itself through violence or spectacle. The still small voice is the voice beneath all voices, accessible only when the prophet has been stripped bare by exhaustion, fear, and solitude. This passage has anchored the Christian apophatic tradition for three millennia.',
     quotes:['After the fire: a still small voice. (1 Kings 19:12)','The word is very near you; it is in your mouth and in your heart. (Deuteronomy 30:14)'],
@@ -500,11 +503,11 @@ const ENTRIES = [
 ];
 
 const STRUCTURE = [
-  { cat:'scripture',  title:'Sacred Scripture',         desc:'The Biblical foundations of indwelling theology', count:6 },
-  { cat:'desert',     title:'Desert Fathers & Mothers', desc:'The founding laboratory of Christian contemplative practice', count:6 },
-  { cat:'medieval',   title:'Medieval Mystics',          desc:'The flowering of Western mystical theology', count:6 },
-  { cat:'carmelite',  title:'Carmelite Tradition',       desc:'Teresa, John, Lawrence, and Thérèse', count:6 },
-  { cat:'modern',     title:'Modern Contemplatives',     desc:'Merton, Keating, and the 20th-century renewal', count:6 },
+  { cat:'scripture',  title:'Sacred Scripture',         desc:'The Biblical foundations of indwelling theology', count:20 },
+  { cat:'desert',     title:'Desert Fathers & Mothers', desc:'The founding laboratory of Christian contemplative practice', count:20 },
+  { cat:'medieval',   title:'Medieval Mystics',          desc:'The flowering of Western mystical theology', count:20 },
+  { cat:'carmelite',  title:'Carmelite Tradition',       desc:'Teresa, John, Lawrence, and Thérèse', count:20 },
+  { cat:'modern',     title:'Modern Contemplatives',     desc:'Merton, Keating, and the 20th-century renewal', count:20 },
 ];
 
 let currentFilter = 'all';
