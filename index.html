@@ -255,7 +255,7 @@
   <p class="subtitle">A Digital Exhibition of Christian Contemplative Pointers</p>
   <button class="intro-toggle-btn" onclick="toggleIntro()">Read Introduction</button>
   <div id="intro-box">
-    This digital exhibition gathers one hundred contemplative pointers from across the Christian tradition — from the Hebrew prophets to the 21st century — each pointing to the most radical claim of Christian mysticism: that the living God indwells the human soul, and that this indwelling can be consciously entered. Click any entry to open the full record, with its narrative, key quotes, Scripture reference, and a contemplative practice.
+    This digital exhibition gathers thirty contemplative "shewings" from across the Christian tradition — pointers not to miraculous external events, but to the most radical claim of Christian mysticism: that the living God indwells the human soul, and that this indwelling can be consciously entered. Click any entry to open the full record, with its narrative, key quotes, Scripture reference, and a contemplative practice.
   </div>
 </header>
 
@@ -497,7 +497,15 @@ var ENTRIES = [
     scripture:'John 14:23',
     practice:{ type:'Trinitarian Indwelling Prayer', text:'Sit for 20 minutes with this image from the tradition: you are a space in which the Trinity dwells. The Father gazes at you with complete knowledge and love. The Son has taken your nature as his own. The Spirit breathes within you. Simply allow this reality — which the mystics assure you is not imagination but fact — to settle into awareness. End: "Glory be to the Father, and to the Son, and to the Holy Spirit — as it was in the beginning, is now, and ever shall be."' }
   },
-,
+];
+
+const STRUCTURE = [
+  { cat:'scripture',  title:'Sacred Scripture',         desc:'The Biblical foundations of indwelling theology', count:20 },
+  { cat:'desert',     title:'Desert Fathers & Mothers', desc:'The founding laboratory of Christian contemplative practice', count:20 },
+  { cat:'medieval',   title:'Medieval Mystics',          desc:'The flowering of Western mystical theology', count:20 },
+  { cat:'carmelite',  title:'Carmelite Tradition',       desc:'Teresa, John, Lawrence, and Thérèse', count:20 },
+  { cat:'modern',     title:'Modern Contemplatives',     desc:'Merton, Keating, and the 20th-century renewal', count:20 },,
+
 {id:31,cat:'scripture',title:'The Shema: God Is One',era:'c. 7th Century BC — Deuteronomy',
 narrative:"The Shema — 'Hear, O Israel: the LORD our God, the LORD is one' (Deut 6:4) — is the foundational confession of biblical monotheism and the prayer Jesus quoted as the greatest commandment. Christian mystics read the divine unity not merely as numerical oneness but as ontological simplicity: God is without parts, without divisions, without shadow of change. Meister Eckhart's entire mystical theology flows from this: if God is simple, then union with God requires the soul's own simplification, stripping away the multiplicity of passions and desires until a single-pointed love remains. The Shema is the seed of apophatic theology.",
 quotes:["Hear, O Israel: the LORD our God, the LORD is one. (Deuteronomy 6:4)","God is simple and cannot be grasped by the multiplied mind. (Meister Eckhart, Sermon 83)"],
@@ -918,15 +926,7 @@ quotes:["We can only point the way; you must walk it. (Desert Fathers, passim)",
 scripture:'1 John 4:16',
 practice:{type:'The Next Step',text:"Close this exhibition. Put down whatever device you are holding. Sit for 20 minutes in complete silence. Offer no agenda, no method, no expectations. Simply be present to the one who is always already present to you. This is the whole tradition in a single act. Everything else in these one hundred entries was preparation for this moment. Begin."}}
 
-];
 
-
-const STRUCTURE = [
-  { cat:'scripture',  title:'Sacred Scripture',         desc:'The Biblical foundations of indwelling theology', count:20 },
-  { cat:'desert',     title:'Desert Fathers & Mothers', desc:'The founding laboratory of Christian contemplative practice', count:20 },
-  { cat:'medieval',   title:'Medieval Mystics',          desc:'The flowering of Western mystical theology', count:20 },
-  { cat:'carmelite',  title:'Carmelite Tradition',       desc:'Teresa, John, Lawrence, and Thérèse', count:20 },
-  { cat:'modern',     title:'Modern Contemplatives',     desc:'Merton, Keating, and the 20th-century renewal', count:20 },
 ];
 
 let currentFilter = 'all';
