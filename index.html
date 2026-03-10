@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The God Who Indwells — A Digital Exhibition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-dim: rgba(201,168,76,0.25);
+    --bg: #09080f;
+    --bg2: #0f0d18;
+    --bg3: #13111e;
+    --text: #e4dccb;
+    --text-dim: #a09484;
+    --text-muted: #5a5248;
+    --border: rgba(255,255,255,0.07);
+    --col-scripture: #C9A84C;
+    --col-desert: #C07A4A;
+    --col-medieval: #8A74B8;
+    --col-carmelite: #9B5070;
+    --col-modern: #4E8A70;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'EB Garamond', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    background: linear-gradient(180deg, #060510 0%, #0d0b18 60%, var(--bg) 100%);
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 20%, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .ornament { color: var(--gold); opacity: 0.5; letter-spacing: 0.6rem; font-size: 1rem; margin-bottom: 1.8rem; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: #ede4d0;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+  .subtitle {
+    font-size: clamp(0.78rem, 1.5vw, 0.88rem);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2.2rem;
+  }
+  .intro-toggle-btn {
+    background: none;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    padding: 0.5rem 1.6rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .intro-toggle-btn:hover { background: rgba(201,168,76,0.08); }
+  #intro-box {
+    max-width: 680px; margin: 1.8rem auto 0;
+    font-style: italic; font-size: 1.04rem; line-height: 1.9;
+    color: #c0b8a8;
+    display: none;
+  }
+  #intro-box.open { display: block; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 90;
+    background: rgba(9,8,15,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.35rem;
+    padding: 0.9rem 1rem;
+  }
+  .nav-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #847870;
+    padding: 0.38rem 0.9rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.07em;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.22); }
+  .nav-btn.active { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.1); }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1.2rem;
+    padding: 2.5rem clamp(1rem, 5vw, 3rem);
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    border-color: rgba(255,255,255,0.16);
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-stripe { height: 3px; }
+  .card-num {
+    position: absolute; top: 0.9rem; right: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; font-weight: 300;
+    opacity: 0.09; line-height: 1; pointer-events: none;
+  }
+  .card-body { padding: 1.3rem 1.3rem 0.8rem; }
+  .card-cat { font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.28rem; font-weight: 400; color: #ede4d0; margin-bottom: 0.28rem; line-height: 1.3; }
+  .card-era { font-size: 0.8rem; color: #6a6050; font-style: italic; margin-bottom: 0.7rem; }
+  .card-snippet { font-size: 0.88rem; line-height: 1.7; color: #807870; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-footer {
+    padding: 0.7rem 1.3rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card-practice { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: #564e44; }
+  .card-arrow { font-size: 0.85rem; color: #504840; transition: transform 0.18s, color 0.18s; }
+  .card:hover .card-arrow { transform: translateX(4px); color: var(--gold); }
+
+  /* ── MODAL ── */
+  #modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(4,3,10,0.93);
+    overflow-y: auto;
+    padding: 2rem 1rem;
+    animation: fadeIn 0.2s ease;
+  }
+  #modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #modal-box {
+    background: #0d0b18;
+    border: 1px solid rgba(201,168,76,0.18);
+    max-width: 700px; width: 100%;
+    margin: auto;
+    position: relative;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  #modal-stripe { height: 4px; }
+  #modal-close {
+    position: absolute; top: 0.9rem; right: 0.9rem;
+    background: none; border: 1px solid rgba(255,255,255,0.1);
+    color: #807870; width: 2rem; height: 2rem;
+    cursor: pointer; font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.18s; z-index: 5;
+  }
+  #modal-close:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+  #modal-body { padding: 1.8rem 2.2rem 2.4rem; }
+  #modal-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.45; margin-bottom: 0.35rem; }
+  #modal-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem, 4vw, 2.3rem); font-weight: 400; color: #ede4d0; line-height: 1.2; margin-bottom: 0.3rem; }
+  #modal-era { font-size: 0.88rem; font-style: italic; color: #6a6050; margin-bottom: 1.6rem; }
+  .m-label { font-size: 0.66rem; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.42; margin-bottom: 0.55rem; }
+  #modal-narrative { font-size: 1rem; line-height: 1.9; color: #b0a898; margin-bottom: 1.8rem; }
+  #modal-quotes {
+    border-left: 2px solid rgba(201,168,76,0.3);
+    padding: 0.8rem 1.2rem;
+    background: rgba(201,168,76,0.025);
+    margin-bottom: 1.8rem;
+  }
+  .modal-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.08rem; color: #d8cfc0; line-height: 1.7; margin-bottom: 0.55rem; }
+  .modal-quote:last-child { margin-bottom: 0; }
+  #modal-scripture {
+    display: inline-block;
+    border: 1px solid rgba(201,168,76,0.28);
+    padding: 0.28rem 0.75rem;
+    font-size: 0.84rem; letter-spacing: 0.1em;
+    color: var(--gold); margin-bottom: 1.8rem;
+  }
+  #modal-practice {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 1.2rem 1.3rem;
+  }
+  #modal-practice-type { font-size: 0.66rem; letter-spacing: 0.26em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  #modal-practice-text { font-size: 0.96rem; line-height: 1.85; color: #9a9288; }
+
+  /* ── STRUCTURE SECTION ── */
+  .structure { max-width: 900px; margin: 0 auto 4rem; padding: 0 1.5rem; }
+  .structure-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 2.5rem; }
+  .structure-heading { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; text-align: center; color: #ede4d0; margin-bottom: 0.5rem; }
+  .structure-sub { text-align: center; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2rem; }
+  .structure-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .structure-card { background: var(--bg3); border: 1px solid var(--border); padding: 1rem 1.2rem; }
+  .structure-bar { height: 2px; width: 28px; margin-bottom: 0.8rem; }
+  .structure-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #ede4d0; margin-bottom: 0.3rem; }
+  .structure-desc { font-size: 0.78rem; color: #504840; line-height: 1.6; }
+  .structure-count { font-size: 0.7rem; letter-spacing: 0.12em; margin-top: 0.6rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 2.5rem 1rem;
+    border-top: 1px solid var(--border);
+    color: #3e3a32; font-size: 0.82rem; letter-spacing: 0.05em;
+  }
+  footer .f-cross { color: var(--gold); opacity: 0.35; font-size: 1rem; margin-bottom: 0.4rem; }
+
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; padding: 1.5rem 0.8rem; }
+    #modal-body { padding: 1.4rem 1.3rem 1.8rem; }
+    h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <h1>The God Who Indwells</h1>
+  <p class="subtitle">A Digital Exhibition of Christian Contemplative Pointers</p>
+  <button class="intro-toggle-btn" onclick="toggleIntro()">Read Introduction</button>
+  <div id="intro-box">
+    This digital exhibition gathers thirty contemplative "shewings" from across the Christian tradition — pointers not to miraculous external events, but to the most radical claim of Christian mysticism: that the living God indwells the human soul, and that this indwelling can be consciously entered. Click any entry to open the full record, with its narrative, key quotes, Scripture reference, and a contemplative practice.
+  </div>
+</header>
+
+<nav id="nav-bar">
+  <button class="nav-btn active" onclick="filter('all', this)">∞ All Entries</button>
+  <button class="nav-btn" onclick="filter('scripture', this)" style="--c:#C9A84C">✦ Sacred Scripture</button>
+  <button class="nav-btn" onclick="filter('desert', this)" style="--c:#C07A4A">◈ Desert Fathers &amp; Mothers</button>
+  <button class="nav-btn" onclick="filter('medieval', this)" style="--c:#8A74B8">❋ Medieval Mystics</button>
+  <button class="nav-btn" onclick="filter('carmelite', this)" style="--c:#9B5070">✿ Carmelite Tradition</button>
+  <button class="nav-btn" onclick="filter('modern', this)" style="--c:#4E8A70">◎ Modern Contemplatives</button>
+</nav>
+
+<div class="grid" id="grid"></div>
+
+<div class="structure">
+  <hr class="structure-divider">
+  <h2 class="structure-heading">Exhibition Structure</h2>
+  <p class="structure-sub">Five Wings · Thirty Entries</p>
+  <div class="structure-grid" id="structure-grid"></div>
+</div>
+
+<footer>
+  <div class="f-cross">✦</div>
+  <div>Thirty Contemplative Pointers to the Indwelling God</div>
+  <div style="margin-top:0.3rem;opacity:0.55;font-size:0.72rem">In the spirit of Bl. Carlo Acutis, whose life was an exhibition of divine love</div>
+</footer>
+
+<!-- MODAL -->
+<div id="modal-overlay" onclick="closeModalOutside(event)">
+  <div id="modal-box">
+    <div id="modal-stripe"></div>
+    <button id="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body">
+      <div id="modal-eyebrow"></div>
+      <h2 id="modal-title"></h2>
+      <div id="modal-era"></div>
+      <div class="m-label">Narrative</div>
+      <p id="modal-narrative"></p>
+      <div class="m-label">Key Pointers</div>
+      <div id="modal-quotes"></div>
+      <div class="m-label">Scripture Reference</div>
+      <div id="modal-scripture"></div>
+      <br>
+      <div id="modal-practice">
+        <div id="modal-practice-type"></div>
+        <div id="modal-practice-text"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CATS = {
+  scripture:  { label: 'Sacred Scripture',          icon: '✦', color: '#C9A84C' },
+  desert:     { label: 'Desert Fathers & Mothers',  icon: '◈', color: '#C07A4A' },
+  medieval:   { label: 'Medieval Mystics',           icon: '❋', color: '#8A74B8' },
+  carmelite:  { label: 'Carmelite Tradition',        icon: '✿', color: '#9B5070' },
+  modern:     { label: 'Modern Contemplatives',      icon: '◎', color: '#4E8A70' },
+};
+
+const ENTRIES = [
+  { id:1, cat:'scripture', title:'The Still Small Voice', era:'c. 850 BC — The Prophet Elijah',
+    narrative:'Exhausted and fleeing into the desert, Elijah encounters God not in wind, earthquake, or fire — the spectacular theophanies of his tradition — but in what the Hebrew calls a qol demamah daqah: a thin, silent sound. The tradition has long wrestled with this phrase. Is it sound or silence? God\'s indwelling does not announce itself through violence or spectacle. The still small voice is the voice beneath all voices, accessible only when the prophet has been stripped bare by exhaustion, fear, and solitude. This passage has anchored the Christian apophatic tradition for three millennia.',
+    quotes:['After the fire: a still small voice. (1 Kings 19:12)','The word is very near you; it is in your mouth and in your heart. (Deuteronomy 30:14)'],
+    scripture:'1 Kings 19:9–13',
+    practice:{ type:'Lectio Divina', text:'Read 1 Kings 19:9–13 slowly, three times. On the first reading, notice which word or phrase arrests you. On the second, sit with that word in silence for five minutes. On the third, simply rest — not analyzing, but listening for the silence beneath the text. End with: "Speak, Lord, your servant is listening."' }
+  },
+  { id:2, cat:'scripture', title:'The Kingdom Within', era:'c. 30 AD — The Teaching of Jesus',
+    narrative:'When the Pharisees asked when the Kingdom of God was coming, Jesus gave an answer that defied every political and apocalyptic expectation of his era: it is already entos hymōn — within you, or among you. Origen, Meister Eckhart, and Thomas Merton all fixated on the "within" reading. The Kingdom is not a future political event but an ontological reality already present in the depths of every soul. To find it requires not outward searching but an inward turning — what Eckhart called Abgeschiedenheit, detachment, and what Merton called le point vierge: the virgin point of the soul untouched by sin.',
+    quotes:['The Kingdom of God is within you. (Luke 17:21)','The eye through which I see God is the same eye through which God sees me. (Meister Eckhart, Sermon 57)'],
+    scripture:'Luke 17:20–21',
+    practice:{ type:'Centering Prayer', text:'Sit quietly for 20 minutes. Choose a single sacred word — perhaps "Abba," "here," or "love" — as your consent to God\'s presence within. When thoughts arise, gently return to the word. You are not seeking to feel the Kingdom; you are consenting to what is already there.' }
+  },
+  { id:3, cat:'scripture', title:'I AM: The Ground of Being', era:'c. 1250 BC — The Burning Bush',
+    narrative:'Moses asks God for a name, and receives not a name but a verb: YHWH — "I AM WHO I AM," or perhaps "I WILL BE WHO I WILL BE." The mystics seized on this revelation with extraordinary force. For Meister Eckhart, God\'s being is identical with existence itself — the ground (Grund) upon which all created being rests. For Thomas Aquinas, God is not a being among beings but ipsum esse subsistens — subsistent being itself. The burning bush that is not consumed became the central image of a God who indwells creation without being consumed by it, presence without violence.',
+    quotes:['I AM WHO I AM. (Exodus 3:14)','God is a being beyond being and a nothingness beyond nothingness. (Meister Eckhart, Sermon 83)'],
+    scripture:'Exodus 3:1–15',
+    practice:{ type:'Name of God Meditation', text:'On your inhale, breathe in "I AM." On the exhale, release your own name, role, or identity. Repeat for 10 minutes. Notice what remains when all self-definition is set aside. This is the ground the mystics point toward.' }
+  },
+  { id:4, cat:'scripture', title:'Abide in Me', era:'c. 90 AD — The Johannine Tradition',
+    narrative:'The verb menein — to abide, dwell, remain — appears over 40 times in John\'s Gospel and Letters. It is the central dynamic of Johannine mysticism: mutual indwelling. "Abide in me and I in you" (Jn 15:4). This is not metaphor but ontological description. The mystic tradition received this as evidence that the soul\'s union with God is not an achievement to be earned but a relationship to be inhabited. John of the Cross built his entire system of spiritual ascent on this Johannine foundation. The contemplative life is not going somewhere but learning to remain where we already are.',
+    quotes:['Abide in me, and I in you. (John 15:4)','The soul that is united and transformed in God breathes God in God with the same divine breathing that God breathes in himself. (John of the Cross, Living Flame 4.17)'],
+    scripture:'John 15:1–11',
+    practice:{ type:'Abiding Practice', text:'Choose a simple posture and rest in it for 15 minutes. When your mind wanders toward doing, planning, or achieving, return to a single intention: "I am abiding." Nothing to accomplish. Simply practice the art of remaining present to Presence.' }
+  },
+  { id:5, cat:'scripture', title:'The Light That Is Life', era:'c. 90 AD — Prologue of John',
+    narrative:'The opening verses of John\'s Gospel compose one of the most daring theological poems in the Christian tradition. The Logos — the divine Word through whom all things were made — is identified with the light that shines in the darkness and cannot be overcome. Every human being, says the Prologue, receives a share of this light. Origen read this as the basis for universal divine illumination. The Eastern Orthodox tradition developed it into the theology of the divine energies, and Thomas Merton saw it as the ontological innocence within every person — what he called "the hidden wholeness" visible beneath apparent fragmentation.',
+    quotes:['In him was life, and the life was the light of all people. (John 1:4)','There is in all things an invisible fecundity, a dimmed light, a meek namelessness, a hidden wholeness. (Thomas Merton, Hagia Sophia)'],
+    scripture:'John 1:1–14',
+    practice:{ type:'Light Meditation', text:'Close your eyes and become aware of any light visible through your eyelids. Then inwardly imagine a light at the center of your chest that does not originate from you. Breathe gently. This light, says the tradition, is not imagined — it is noticed. Rest in awareness of it for 10 minutes.' }
+  },
+  { id:6, cat:'scripture', title:'Be Still and Know', era:'c. 400 BC — The Psalter',
+    narrative:'Psalm 46:10 — in Hebrew, harpu v\'deu ki anochi Elohim — is perhaps the most compressed contemplative instruction in all Scripture. "Harpu" is often translated "be still" but its root means to let go, to release, to cease striving. The Psalm is addressed to nations at war, to people terrified by catastrophic change. The divine instruction is not to try harder but to release control so profoundly that the underlying reality of God\'s sovereignty — always present — can be perceived. Thomas Keating used this verse as the foundational Biblical warrant for Centering Prayer.',
+    quotes:['Be still and know that I am God. (Psalm 46:10)','Silence is God\'s first language. (Thomas Keating, Open Mind, Open Heart)'],
+    scripture:'Psalm 46',
+    practice:{ type:'Progressive Release', text:'Sit for 20 minutes. For the first 5 minutes, consciously release: your worries, your schedule, your self-image. For the next 5, release even your desire for spiritual experience. For the last 10, release the practice itself. Simply be. Notice what remains when all releasing ceases.' }
+  },
+  { id:7, cat:'desert', title:'Go, Sit in Your Cell', era:'4th Century — Abba Moses of Scetis',
+    narrative:'A young monk came to Abba Moses asking for a word. The old man said simply: "Go, sit in your cell, and your cell will teach you everything." This became perhaps the most quoted saying of the Desert Fathers. The cell is not merely a physical space but an interior geography — the inner room of Matthew 6:6. The practice of hesychia (stillness) taught that the soul must first learn to remain in one place before it could enter the deeper stillness where God is met. The cell teaches by stripping away distraction until only the essential question remains: who is present here?',
+    quotes:['Go, sit in your cell, and your cell will teach you everything. (Abba Moses, Sayings of the Desert Fathers)','The fruit of prayer is stillness; the fruit of stillness is union. (Abba Arsenius)'],
+    scripture:'Matthew 6:6',
+    practice:{ type:'Cell Practice', text:'For one hour, resist every impulse to leave your chair, check your phone, or change your environment. Sit with whatever arises — boredom, restlessness, distraction, peace. The cell\'s teaching is in the staying. You are training the soul\'s capacity for presence.' }
+  },
+  { id:8, cat:'desert', title:'The Pure Heart Sees God', era:'4th Century — Evagrius Ponticus',
+    narrative:'Evagrius Ponticus (345–399), the most intellectually formidable of the Desert Fathers, developed a systematic theology of contemplative ascent. His key insight was that the logismoi — thought-streams or passions — create a veil over the mind\'s natural luminosity. Prayer, for Evagrius, was not so much speaking to God as becoming aware of God\'s awareness. His definition of prayer — "prayer is the shedding of thoughts" — fed directly into the apophatic tradition, Meister Eckhart\'s Gelassenheit, and ultimately Thomas Keating\'s Centering Prayer method.',
+    quotes:['Prayer is the shedding of thoughts. (Evagrius Ponticus, Chapters on Prayer 71)','If you are a theologian you truly pray; if you truly pray you are a theologian. (Evagrius, Chapters on Prayer 60)'],
+    scripture:'Matthew 5:8',
+    practice:{ type:'Apophatic Sitting', text:'Sit for 20 minutes with this intention: you are not trying to produce any spiritual state, insight, or feeling. Every thought that arises — however spiritual — gently release. Follow the advice of Evagrius: "Strip yourself of every thought at the time of prayer." The goal is not emptiness but availability.' }
+  },
+  { id:9, cat:'desert', title:'The Heart as Burning Furnace', era:'4th Century — Macarius the Great',
+    narrative:'The Macarian Homilies introduced into Christian spirituality the idea of the heart as the center of divine encounter. Unlike Evagrius\'s more intellectualist approach, Macarius taught that the Spirit of God is received in the heart — the kardiocentrism that would define Eastern Christian spirituality ever after. His image of the heart as a furnace that, once kindled with divine fire, becomes inexhaustible, anticipates the burning of the Sacred Heart and the warmth reported by Christian mystics from Augustine\'s restless heart to Pascal\'s night of fire.',
+    quotes:['The heart is but a small vessel, yet dragons and lions are there, and there likewise is God. (Macarian Homily 43)','Our heart is restless until it rests in You. (Augustine of Hippo, Confessions I.1)'],
+    scripture:'Luke 24:32',
+    practice:{ type:'Heart-Centered Prayer', text:'Place your right hand lightly over your heart. Breathe slowly. With each breath, silently offer: "Lord Jesus Christ, Son of God, have mercy on me." After 10 minutes, drop the verbal prayer and simply rest your attention in the warmth of the heart space. This is the furnace Macarius describes.' }
+  },
+  { id:10, cat:'desert', title:"Amma Syncletica's Two Fires", era:'4th–5th Century — Amma Syncletica',
+    narrative:'Amma Syncletica was one of the most revered Mothers of the early desert, a wealthy Alexandrian woman who renounced everything to live in an abandoned tomb outside the city. She taught that the contemplative life involves two kinds of fire: the fire of temptation that burns and destroys, and the fire of divine love that refines and illuminates. Her key insight was that beginners often confuse these fires — mistaking the heat of spiritual consolation for sanctity, or the cold desolation of purification for abandonment. God\'s indwelling presence is especially present, she said, in the cold dark times of apparent absence.',
+    quotes:['Just as one cannot build a ship without nails, so it is impossible to be saved without humility. (Amma Syncletica)','Those who are great athletes must contend against stronger enemies. (Amma Syncletica, Sayings 15)'],
+    scripture:'Malachi 3:2–3',
+    practice:{ type:'Consolation/Desolation Discernment', text:'In your journal, recall a recent period of spiritual dryness or darkness. Sit with it now in prayer for 10 minutes without trying to change it. Ask: "What is being refined here?" Then recall a period of spiritual warmth. Ask: "What was I being taught to release my grip on?" Both fires are teachers of the indwelling God.' }
+  },
+  { id:11, cat:'desert', title:'Silence Is the Language of the Age to Come', era:'7th Century — Isaac the Syrian',
+    narrative:'Isaac of Nineveh (c. 613–700), Bishop of Nineveh for only five months before resigning to live as a hermit, wrote treatises on prayer that remain among the most penetrating in Christian tradition. His central teaching: beyond all words and concepts, beyond even meditation on Scripture, lies pure prayer — what he called "the prayer of silence" or "wonder." In this state the soul is taken beyond itself into the divine luminosity. Isaac saw this not as a rare mystical grace but as the telos — the natural fulfillment — of the Christian life, the first fruits of resurrection.',
+    quotes:['Silence is the language of the age to come; words are the instruments of this present world. (Isaac of Nineveh, Mystic Treatises 66)','The man who has found love eats and drinks Christ every day and hour, and has already become immortal. (Isaac of Nineveh, Mystic Treatises 35)'],
+    scripture:'Revelation 8:1',
+    practice:{ type:'Practice of Silence', text:'Set a timer for 30 minutes. Do not read, write, or pray with words. Sit in the posture of a listener. When thoughts come, treat them as sounds passing through — neither fighting them nor following them. Isaac teaches that this silence is not empty but full: it is the silence of heaven.' }
+  },
+  { id:12, cat:'desert', title:"The Monk's Mirror", era:'4th Century — Abba Poemen',
+    narrative:'Abba Poemen ("the Shepherd") is the most frequently quoted Desert Father in the Apophthegmata Patrum. His most famous saying sounds almost therapeutic: "Teach your mouth to say that which you have in your heart." But his deeper teaching was about self-knowledge as the gateway to divine encounter. He taught that until a monk truly sees himself — not as he wishes to be, but as he is — he cannot see God clearly, because the ego-self functions as a distorting mirror. The contemplative life is, at its foundation, a long education in honest self-perception.',
+    quotes:['A man who knows himself is greater than one who raises the dead. (Abba Poemen)','Do not give your heart to that which does not satisfy your heart. (Abba Poemen, Sayings 4)'],
+    scripture:'1 Corinthians 13:12',
+    practice:{ type:'Examen of Self-Knowledge', text:'In the evening, spend 15 minutes in the Ignatian Examen with a Poemen-inspired focus: Where today did I act from my true self? Where from a false, defended, or performed self? Bring both before God without judgment. The honest seeing IS the prayer.' }
+  },
+  { id:13, cat:'medieval', title:'The Spark of the Soul', era:'c. 1300 — Meister Eckhart',
+    narrative:'Meister Eckhart (c. 1260–1328), the Dominican theologian and mystic, developed one of the most radical doctrines of divine indwelling in Christian history. He spoke of a "spark of the soul" (Fünklein) — a point of contact between the human soul and God that has never been separated from God, that time has never touched, and that no created thing can ever reach. This is not the soul\'s achievement; it is its nature. Eckhart scandalously declared it to be "uncreated and uncreatable" — a claim for which he faced inquisitorial proceedings. Whether orthodox or not in its precise formulation, the intuition points toward what other mystics call the imago Dei in its deepest sense.',
+    quotes:['There is something in the soul which is above the soul, divine, simple, a pure nothing. (Meister Eckhart, Sermon 28)','The seed of God is in us. Now the seed of a pear tree grows into a pear tree, the seed of a nut tree into a nut tree, and the seed of God into God. (Eckhart, Sermon 96)'],
+    scripture:'Genesis 1:27',
+    practice:{ type:'Birthing of the Word', text:'Eckhart taught that God is eternally giving birth to the Word in the soul. Sit for 20 minutes with this intention: you are not seeking an experience, you are providing the interior silence in which the eternal birth can occur. As Eckhart says: "God acts and the soul is acted upon." Your practice is receptivity.' }
+  },
+  { id:14, cat:'medieval', title:'All Shall Be Well', era:'c. 1373 — Julian of Norwich',
+    narrative:'On May 8, 1373, a 30-year-old anchoress in Norwich, England, received sixteen "shewings" during a near-death illness. What Julian of Norwich received was not a theology of individual consolation but a cosmic revelation of God\'s love. Her famous phrase — "All shall be well, and all shall be well, and all manner of thing shall be well" — is not wishful thinking but a mystical perception of the ground of reality. Julian was perhaps the first English woman to write a book. Her Revelations of Divine Love represent the most sustained theology of divine indwelling written by a medieval Western woman.',
+    quotes:['All shall be well, and all shall be well, and all manner of thing shall be well. (Julian, Revelations Ch. 27)','He said not "Thou shalt not be tempested," but He said: "Thou shalt not be overcome." (Julian, Revelations Ch. 68)'],
+    scripture:'Romans 8:38–39',
+    practice:{ type:'Hazelnut Meditation', text:'Julian saw in a hazelnut that "it lasts and ever shall last, for God loves it." Hold a small object in your palm — any natural object. Sit for 10 minutes attending to it. It exists because God holds it in love. You exist for the same reason. Let this simple fact settle into the body.' }
+  },
+  { id:15, cat:'medieval', title:'The Cloud of Unknowing', era:'c. 1375 — Anonymous English Mystic',
+    narrative:'An anonymous 14th-century English monk wrote what is perhaps the most psychologically sophisticated Christian guide to contemplative prayer before the 20th century. "The Cloud of Unknowing" teaches that God cannot be known by the intellect — above the soul, God is always enveloped in a cloud of unknowing. But God can be "touched" by love. The practitioner is instructed to place a "cloud of forgetting" beneath themselves — setting aside all thoughts, images, and spiritual consolations — and to direct a "naked intent" of love upward toward the cloud. This teaching directly influenced Thomas Keating\'s Centering Prayer method.',
+    quotes:['Strike that thick cloud of unknowing with the sharp dart of longing love. (Cloud of Unknowing, Ch. 6)','By love He may be gotten and holden, but by thought never. (Cloud of Unknowing, Ch. 4)'],
+    scripture:'Exodus 20:21',
+    practice:{ type:'Cloud Practice', text:'For 20 minutes, hold a single word — "Love" or "God" — as a dart of longing love aimed into the unknown. Do not analyze, imagine, or feel. Each time a thought or image arises, place it below you in the "cloud of forgetting." This is not suppression; it is loving redirection.' }
+  },
+  { id:16, cat:'medieval', title:'The Ground of the Soul', era:'c. 1350 — Blessed Jan van Ruusbroec',
+    narrative:'Jan van Ruusbroec (1293–1381), the "Admirable Doctor," was the great Flemish mystic whose work bridged the Rhineland tradition of Eckhart with the Flemish Devotio Moderna. His masterwork, The Spiritual Espousals, describes a three-fold life leading to what he called "the God-seeing life" — direct contemplative union with the Trinity. His key concept was the "ground of the soul" (gront) as the place where the soul meets God\'s own ground, beyond all images and concepts. This mutual grounding is not absorption but nuptial union — the soul remains itself while becoming fully permeated by divine life.',
+    quotes:['We must go out into God with our eternal image and meet Him without means in the divine darkness. (Ruusbroec, Spiritual Espousals III)','The loving man goes beyond himself, above all gifts, above all divine gifts, above all clarity. (Ruusbroec, Sparkling Stone)'],
+    scripture:'Song of Songs 2:16',
+    practice:{ type:'Threefold Life Review', text:'Ruusbroec describes three levels: the active life (works of love), the interior life (devout practice), and the contemplative life (rest in God). Spend 5 minutes with each in sequence, then conclude with 10 minutes of wordless rest. The third level is the source of the other two.' }
+  },
+  { id:17, cat:'medieval', title:'Detachment as the Highest Virtue', era:'c. 1300 — Meister Eckhart',
+    narrative:'In his treatise On Detachment (Von Abgeschiedenheit), Eckhart made the astonishing claim that detachment is higher than love, higher than humility. His argument: pure detachment empties the soul of all content whatsoever, leaving it like a clean mirror in which God cannot help but reflect himself. The detached soul does not go to God — it becomes the space in which God arrives. This is the most radical expression of the negative way (via negativa) in Western Christian mysticism, and it directly anticipates the systematic non-attachment teaching of John of the Cross two centuries later.',
+    quotes:['A master of detachment: such a person, even in the greatest anguish or the greatest joy, is not moved from their interior stillness. (Eckhart, On Detachment)','If the only prayer you ever say in your entire life is "thank you," it will be enough. (Meister Eckhart)'],
+    scripture:'Philippians 4:11–12',
+    practice:{ type:'Detachment Exercise', text:'For three days, practice offering to God your attachment to one desired outcome — a relationship, a project, a spiritual experience. Each morning say: "I release my grip on this. I am available for what is, not what I am arranging." Notice what becomes available in that interior space.' }
+  },
+  { id:18, cat:'medieval', title:"The Interior Castle's Seventh Mansion", era:'1577 — Teresa of Ávila',
+    narrative:'Teresa of Ávila (1515–1582), Doctor of the Church, wrote The Interior Castle while in a state of mystical illumination in 1577, completing it in two months. She described the soul as a crystal castle with seven mansions, God dwelling at the center. The Seventh Mansion is where the soul enters into what Teresa calls "spiritual marriage" — a permanent, unitive state. The landmark of the Seventh Mansion is not ecstasy or rapture but a deep, steady peace that remains even in the midst of great suffering and active service. Teresa mapped the interior life with the accuracy of a scientist and the warmth of a lover.',
+    quotes:['The soul now rests in this center with its God. (Teresa, Interior Castle VII.2)','The important thing is not to think much but to love much. (Teresa, Interior Castle IV.1)'],
+    scripture:'John 17:21–23',
+    practice:{ type:'Castle Visualization', text:'Close your eyes. Imagine yourself entering a luminous castle — your own soul. Move through the outer mansions: self-knowledge, humility, service. Continue moving inward through silence, prayer, suffering, purification. In the innermost room, simply stop. Don\'t speak. Rest. The King is already there.' }
+  },
+  { id:19, cat:'carmelite', title:'The Dark Night of the Soul', era:'1584 — John of the Cross',
+    narrative:'John of the Cross (1542–1591) wrote his most famous poem — "Dark Night" — while imprisoned by his own Carmelite brethren in Toledo in 1577–78, in conditions of extreme deprivation. The poem describes a soul stealing out at night, guided by "no light or guide save the one that burned in my heart." John later wrote two commentaries revealing that the Dark Night is not depression or spiritual failure but God\'s own purification of the soul\'s deepest attachments. The darkness is luminous; the apparent absence is the most intense form of presence.',
+    quotes:['Oh night that guided me, Oh night more lovely than the dawn! (John of the Cross, Dark Night, stanza 5)','The soul that is attached to anything, however much good there may be in it, will not arrive at the liberty of divine union. (John, Ascent I.4.4)'],
+    scripture:'Psalm 139:11–12',
+    practice:{ type:'Dark Night Discernment', text:'John offers three signs that spiritual dryness may be purificatory: (1) you find no satisfaction in God or creatures; (2) you fear you have failed God; (3) yet you still desire God and do not want to abandon prayer. Sit with these three signs today. If all three are present, rest — you are being purified, not abandoned.' }
+  },
+  { id:20, cat:'carmelite', title:'The Living Flame of Love', era:'1584 — John of the Cross',
+    narrative:'John of the Cross wrote his most exultant poem, "Living Flame of Love," in a state of transformative union. Where the Dark Night poems describe the journey of purification, the Living Flame describes its destination: the soul wholly aflame with divine love. John\'s commentary describes what he calls the "caverns of feeling" — vast interior depths of the soul that had been hidden behind clutter, now revealed and filled with the Spirit. The language is explicitly Trinitarian: the soul breathes in the breathing of the Father, Son, and Holy Spirit.',
+    quotes:['How gently and lovingly You wake in my heart, where in secret You dwell alone. (John, Living Flame, stanza 4)','When the soul is totally purified, the caverns of the soul which were dark and blind now give forth light. (John, Living Flame 3.74)'],
+    scripture:'Romans 5:5',
+    practice:{ type:'Breath of the Trinity', text:'In deep contemplative rest, become aware of your breathing. John says the soul in union "breathes God in God." On your inhale, receive: "I am breathed." On your exhale, offer: "I breathe back." For 15 minutes, practice the simple awareness that the breath of life is not yours — you participate in a breathing that was happening before you were born.' }
+  },
+  { id:21, cat:'carmelite', title:'The Prayer of Quiet', era:'1565 — Teresa of Ávila',
+    narrative:'In the Way of Perfection and the Life, Teresa describes the "Prayer of Quiet" using her famous metaphor of watering a garden. The first stage (mental prayer) is like drawing water by hand from a well — effortful and slow. The second stage (Prayer of Quiet) is like a waterwheel — God begins to do the work, and the soul receives more with less effort. Teresa notes that in this stage the will is held captive by God while the intellect may still wander. She is remarkable for her psychological precision, mapping the interior life with the accuracy of a scientist and the warmth of a lover.',
+    quotes:['In the prayer of quiet God begins to give the soul a share in His kingdom. (Teresa, Life Ch. 15)','The soul then is like one in a state of swoon, who can neither stir hand nor foot. (Teresa, Life Ch. 15)'],
+    scripture:'Psalm 131',
+    practice:{ type:'Garden Meditation', text:'Read Psalm 131 slowly ("I have stilled and quieted my soul like a weaned child with its mother"). Then sit in Teresa\'s second form of prayer: offer your will to God and release your need to understand what is happening. When the intellect wanders, gently return. You are the garden; the watering is being done for you.' }
+  },
+  { id:22, cat:'carmelite', title:"Brother Lawrence's Constant Conversation", era:'17th Century — Brother Lawrence of the Resurrection',
+    narrative:'Nicholas Herman (c. 1614–1691), known as Brother Lawrence, was a lay brother in a Carmelite monastery in Paris who spent much of his life doing kitchen work. His simple practice of maintaining constant interior awareness of God\'s presence — in the midst of pots and pans, not only in formal prayer — became one of the most influential spiritual classics in Christian history. His letters and conversations were collected as The Practice of the Presence of God. The radical simplicity of his teaching: God is equally available in washing dishes as in liturgical prayer. The obstacle is not busyness but inattention.',
+    quotes:['We must know before we can love. In order to know God, we must often think of Him. (Brother Lawrence, The Practice of the Presence of God)','The time of business does not differ with me from the time of prayer. (Brother Lawrence, Conversations IV)'],
+    scripture:'1 Thessalonians 5:17',
+    practice:{ type:'Presence in Activity', text:'Choose one ordinary daily task — washing dishes, walking to your car, eating lunch. For that task, practice what Brother Lawrence called "recollection": a gentle, recurring return of attention to the awareness of being in God\'s presence. No words needed. A simple: "You are here, I am here." This is advanced practice disguised as simplicity.' }
+  },
+  { id:23, cat:'carmelite', title:'The Ascent of Mount Carmel', era:'c. 1579 — John of the Cross',
+    narrative:'John of the Cross begins his systematic treatise with a rough drawing of a mountain — Mount Carmel — with two paths up the sides and one path up the middle. The side paths are labeled with spiritual and material goods. Both paths peter out before the summit. The middle path is labeled "nothing, nothing, nothing, nothing — and even on the Mountain, nothing." John\'s teaching: attachment to spiritual goods is as much an obstacle as attachment to material ones. The indwelling God is encountered not by accumulating experiences but by releasing attachment to them.',
+    quotes:['To reach satisfaction in all, desire its possession in nothing. (John, Ascent I.13.11)','Nothing, nothing, nothing — and even on the Mountain, nothing. (John, Drawing of Mount Carmel)'],
+    scripture:'Matthew 16:25',
+    practice:{ type:'Nada Practice', text:'Sit for 20 minutes. As each thought, image, sensation, or spiritual experience arises, silently say "nada" — nothing. You are not rejecting these things; you are practicing non-attachment to them. This clears the inner space for the "todo" — the All — that John promises awaits beyond all nothings.' }
+  },
+  { id:24, cat:'carmelite', title:"Thérèse's Little Way", era:'1895 — Thérèse of Lisieux',
+    narrative:"Thérèse of Lisieux (1873–1897), Doctor of the Church, died at 24 from tuberculosis. Her autobiography, Story of a Soul, describes what she called the \"little way of spiritual childhood\" — a path to holiness not through heroic ascetic achievement but through small acts of love done with great interior attention. Thérèse identified as her vocation the being of love at the heart of the Church. Her insight was that the ordinary is the extraordinary: each moment of unnoticed love is a form of divine indwelling made available. She is the patron saint of the Church's hidden ordinary contemplatives.",
+    quotes:['My vocation is love! I have found my place in the Church, and it is You, O God, who have given me this place. (Thérèse, Story of a Soul, Manuscript B)','I will spend my heaven doing good on earth. (Thérèse, Last Conversations)'],
+    scripture:'1 Corinthians 12:31–13:1',
+    practice:{ type:'Little Way Practice', text:'Today, choose three small, entirely unnoticed acts of love — holding a door, genuinely listening to someone, suppressing an impatient thought. Do each one with full interior attention. At the end of the day, offer all three to God without reporting them to anyone. This is Thérèse\'s path.' }
+  },
+  { id:25, cat:'modern', title:'The True Self and the False Self', era:'1948–1968 — Thomas Merton',
+    narrative:'Thomas Merton (1915–1968), the Trappist monk of Gethsemani, Kentucky, developed his most lasting theological contribution around the distinction between the true self (the self as known and loved by God, the imago Dei) and the false self (the constructed ego-identity built from achievement, approval, and avoidance). Contemplation, for Merton, is the gradual discovery of the true self — not as spiritual accomplishment but as gift received. His insight was radical: the self we defend most vigorously is not our real self at all.',
+    quotes:['The only true joy on earth is to escape from the prison of our own false self, and enter by love into union with the Life Who dwells and sings within the essence of every creature. (Merton, New Seeds of Contemplation)','My Lord God, I have no idea where I am going. I do not see the road ahead of me. (Merton, Thoughts in Solitude)'],
+    scripture:'Galatians 2:20',
+    practice:{ type:'True/False Self Inventory', text:'Take 20 minutes with your journal. List three things your false self desperately needs: approval, achievement, control, certainty, admiration. Then, for each, ask: "What is my true self underneath this need?" The practice is not self-criticism but honest seeing. As Merton says: "To know who I am is to know God."' }
+  },
+  { id:26, cat:'modern', title:'Centering Prayer: Consent to Presence', era:'1970s–present — Thomas Keating',
+    narrative:'Thomas Keating (1923–2018), Trappist abbot of St. Joseph\'s Abbey in Spencer, Massachusetts, developed Centering Prayer in response to a generation of Christians turning to Eastern practices because they couldn\'t find deep contemplative method in their own tradition. Centering Prayer is explicitly rooted in The Cloud of Unknowing and the Carmelite tradition but offered in a format accessible to contemporary people. Its four simple guidelines encode a complete theology: sacred word as consent (not concentration), release of thoughts as non-attachment, gentle return as perseverance, rest in silence as receptivity.',
+    quotes:['Contemplative prayer is not something we do; it is something we consent to. (Thomas Keating, Open Mind, Open Heart)','The more we consent to God\'s presence and action, the more God transforms us. (Keating, Invitation to Love)'],
+    scripture:'Luke 11:9–10',
+    practice:{ type:'Centering Prayer', text:'Sit comfortably, close your eyes. (1) Choose a sacred word as symbol of your consent to God\'s presence. (2) Introduce it gently as you begin. (3) When engaged with thoughts, return to the sacred word. (4) At the end (20 minutes), remain in silence for 2–3 minutes. The sacred word is not a mantra. It is consent — the orientation of your will.' }
+  },
+  { id:27, cat:'modern', title:'The Hidden Sayings', era:'1st–2nd Century (Coptic) / Gospel of Thomas',
+    narrative:'The Gospel of Thomas, discovered at Nag Hammadi in 1945, is a collection of 114 sayings attributed to Jesus. Though not in the canonical New Testament, several of its sayings echo canonical material with a strongly mystical emphasis and are studied by some Catholic scholars as illuminating the inner tradition. Saying 3: "The Kingdom is inside of you and outside of you." Saying 77: "I am the light that is above all things. Split a piece of wood, I am there. Lift up a stone, and you will find me there." These sayings have been read by mystics like Merton as congruent with the deepest Christian contemplative tradition.',
+    quotes:['The Kingdom of the Father is spread out upon the earth, and people do not see it. (Gospel of Thomas, Saying 113)','Split a piece of wood, I am there. Lift up a stone, and you will find me there. (Gospel of Thomas, Saying 77)'],
+    scripture:'John 14:20',
+    practice:{ type:'Panentheistic Attention', text:'Go outside. Sit with a tree, a stone, or a patch of earth for 15 minutes. Practice not merely looking at the object but looking for the Presence that inhabits it. This is not pantheism (God = the stone) but panentheism (God in the stone, holding it in being). Train this kind of seeing.' }
+  },
+  { id:28, cat:'modern', title:'The Corner of Fourth and Walnut', era:'March 1958 — Thomas Merton, Louisville',
+    narrative:'On March 19, 1958, Thomas Merton was standing at the corner of Fourth and Walnut Streets in Louisville, suddenly overwhelmed by a recognition that he loved all the people around him — and that this love was not sentimental but ontological. He wrote of perceiving the secret beauty hidden in every person: the depths of their hearts where neither sin nor desire nor self-knowledge can reach. This vision became one of the most quoted passages in 20th-century Christian mysticism. It is the social and incarnational face of the contemplative vision.',
+    quotes:['I suddenly saw the secret beauty of their hearts… the core of their reality, the person that each one is in God\'s eyes. (Merton, Conjectures of a Guilty Bystander)','There is no way of telling people that they are all walking around shining like the sun. (Merton, Conjectures)'],
+    scripture:'Genesis 1:31',
+    practice:{ type:'Fourth and Walnut Practice', text:'The next time you are in a public place, choose one person you do not know and spend 30 seconds in silent prayer for them. Not "for their needs" but recognizing: they carry the image of God. They are shining like the sun. This is Merton\'s vision made into daily practice.' }
+  },
+  { id:29, cat:'modern', title:'The Welcoming Prayer', era:'1990s — Mary Mrozowski / Contemplative Outreach',
+    narrative:'Mary Mrozowski, a lay founder of Contemplative Outreach and close student of Thomas Keating, developed the Welcoming Prayer as an active practice complementing the passive surrender of Centering Prayer. It works with the emotional programs for happiness that Keating identified as the roots of the false self: the drives for security/survival, affection/esteem, and power/control. Where Centering Prayer works during formal prayer time, the Welcoming Prayer works in the midst of daily life — particularly in moments of emotional reactivity, transforming charged moments into opportunities for surrender.',
+    quotes:['Welcome, welcome, welcome. I welcome everything that comes to me today, because I know it is for my healing. (Welcoming Prayer)','The emotional programs for happiness are the source of all our suffering. (Thomas Keating, Invitation to Love)'],
+    scripture:'James 1:2–4',
+    practice:{ type:'Welcoming Prayer', text:'When you notice a strong emotion (anxiety, irritation, grief, fear), practice three movements: (1) Focus — feel the sensation in your body without narrating it. (2) Welcome — say "Welcome" to the feeling without conditions. (3) Let go — say "I let go of my desire for security/esteem/control that underlies this feeling." This is not repression; it is the death of the false self\'s grip.' }
+  },
+  { id:30, cat:'modern', title:'The Indwelling Trinity', era:'A Synthesis Across All Eras',
+    narrative:'The Catholic mystic tradition culminates, from East and West, desert and city, medieval and modern, in a single convergent recognition: the God revealed in Jesus Christ is a communion of Persons — Father, Son, and Holy Spirit — whose interior life is self-giving love, and who has taken up residence in the human soul. Every witness in this exhibition — Elijah in the cave, Evagrius in the desert, Julian receiving her showings, Eckhart preaching in Cologne, John writing poems in prison, Merton standing in Louisville, Keating teaching in Colorado — all circle this single mystery: "We will come to him and make our dwelling with him."',
+    quotes:['We will come to him and make our dwelling with him. (John 14:23)','The goal of the spiritual life is to let God be God in you. (Meister Eckhart, Sermon 52)'],
+    scripture:'John 14:23',
+    practice:{ type:'Trinitarian Indwelling Prayer', text:'Sit for 20 minutes with this image from the tradition: you are a space in which the Trinity dwells. The Father gazes at you with complete knowledge and love. The Son has taken your nature as his own. The Spirit breathes within you. Simply allow this reality — which the mystics assure you is not imagination but fact — to settle into awareness. End: "Glory be to the Father, and to the Son, and to the Holy Spirit — as it was in the beginning, is now, and ever shall be."' }
+  },
+];
+
+const STRUCTURE = [
+  { cat:'scripture',  title:'Sacred Scripture',         desc:'The Biblical foundations of indwelling theology', count:6 },
+  { cat:'desert',     title:'Desert Fathers & Mothers', desc:'The founding laboratory of Christian contemplative practice', count:6 },
+  { cat:'medieval',   title:'Medieval Mystics',          desc:'The flowering of Western mystical theology', count:6 },
+  { cat:'carmelite',  title:'Carmelite Tradition',       desc:'Teresa, John, Lawrence, and Thérèse', count:6 },
+  { cat:'modern',     title:'Modern Contemplatives',     desc:'Merton, Keating, and the 20th-century renewal', count:6 },
+];
+
+let currentFilter = 'all';
+
+function getCatColor(cat) { return CATS[cat]?.color || '#888'; }
+function getCatLabel(cat) { return CATS[cat]?.label || cat; }
+
+function renderGrid(filter) {
+  const grid = document.getElementById('grid');
+  const entries = filter === 'all' ? ENTRIES : ENTRIES.filter(e => e.cat === filter);
+  grid.innerHTML = entries.map((e, i) => `
+    <div class="card" style="animation-delay:${i*0.04}s" onclick="openModal(${e.id})">
+      <div class="card-stripe" style="background:linear-gradient(90deg,${getCatColor(e.cat)},${getCatColor(e.cat)}55)"></div>
+      <div class="card-body">
+        <div class="card-num">${String(e.id).padStart(2,'0')}</div>
+        <div class="card-cat" style="color:${getCatColor(e.cat)}">${getCatLabel(e.cat)}</div>
+        <div class="card-title">${e.title}</div>
+        <div class="card-era">${e.era}</div>
+        <div class="card-snippet">${e.narrative}</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-practice">${e.practice.type}</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderStructure() {
+  const sg = document.getElementById('structure-grid');
+  sg.innerHTML = STRUCTURE.map(s => `
+    <div class="structure-card">
+      <div class="structure-bar" style="background:${getCatColor(s.cat)}"></div>
+      <div class="structure-name">${s.title}</div>
+      <div class="structure-desc">${s.desc}</div>
+      <div class="structure-count" style="color:${getCatColor(s.cat)}">${s.count} Entries</div>
+    </div>
+  `).join('');
+}
+
+function filter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(cat);
+}
+
+function openModal(id) {
+  const e = ENTRIES.find(x => x.id === id);
+  const color = getCatColor(e.cat);
+  document.getElementById('modal-stripe').style.background = `linear-gradient(90deg,${color},${color}44)`;
+  document.getElementById('modal-eyebrow').textContent = `Entry ${String(e.id).padStart(2,'0')} · ${getCatLabel(e.cat)}`;
+  document.getElementById('modal-title').textContent = e.title;
+  document.getElementById('modal-era').textContent = e.era;
+  document.getElementById('modal-narrative').textContent = e.narrative;
+  document.getElementById('modal-quotes').innerHTML = e.quotes.map(q => `<div class="modal-quote">"${q}"</div>`).join('');
+  document.getElementById('modal-scripture').textContent = e.scripture;
+  document.getElementById('modal-practice-type').style.color = color;
+  document.getElementById('modal-practice-type').textContent = `Contemplative Practice · ${e.practice.type}`;
+  document.getElementById('modal-practice-text').textContent = e.practice.text;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function toggleIntro() {
+  const box = document.getElementById('intro-box');
+  const btn = document.querySelector('.intro-toggle-btn');
+  box.classList.toggle('open');
+  btn.textContent = box.classList.contains('open') ? 'Close Introduction' : 'Read Introduction';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+renderGrid('all');
+renderStructure();
+</script>
+</body>
+</html>
