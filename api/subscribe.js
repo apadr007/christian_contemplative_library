@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Step 1: Find or create the tag
+    // Find or create the tag
     const tagsRes = await fetch(
       `https://api.convertkit.com/v3/tags?api_key=${API_KEY}`
     );
@@ -40,11 +40,10 @@ export default async function handler(req, res) {
     }
 
     if (!tagId) {
-      console.error('Could not find or create tag');
       return res.status(502).json({ error: 'Could not subscribe. Please try again.' });
     }
 
-    // Step 2: Subscribe email to tag (creates subscriber + applies tag in one call)
+    // Subscribe to tag with skip_email_confirmation = true (single opt-in)
     const subRes = await fetch(
       `https://api.convertkit.com/v3/tags/${tagId}/subscribe`,
       {
@@ -53,6 +52,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           api_key: API_KEY,
           email: email,
+          skip_email_confirmation: true
         })
       }
     );
@@ -60,14 +60,14 @@ export default async function handler(req, res) {
     const subData = await subRes.json();
 
     if (!subRes.ok) {
-      console.error('Kit subscribe error:', JSON.stringify(subData));
+      console.error('Kit error:', JSON.stringify(subData));
       return res.status(502).json({ error: 'Could not subscribe. Please try again.' });
     }
 
     return res.status(200).json({ success: true });
 
   } catch (err) {
-    console.error('Subscribe handler error:', err.message);
+    console.error('Subscribe error:', err.message);
     return res.status(500).json({ error: 'Server error. Please try again.' });
   }
 }
