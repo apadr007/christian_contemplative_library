@@ -1233,43 +1233,6 @@ function filter(cat, btn) {
   renderGrid(cat);
 }
 
-function openModal(id) {
-  const e = ENTRIES.find(x => x.id === id);
-  const color = getCatColor(e.cat);
-  document.getElementById('modal-stripe').style.background = `linear-gradient(90deg,${color},${color}44)`;
-  document.getElementById('modal-eyebrow').textContent = `Entry ${String(e.id).padStart(2,'0')} · ${getCatLabel(e.cat)}`;
-  document.getElementById('modal-title').textContent = e.title;
-  document.getElementById('modal-era').textContent = e.era;
-  document.getElementById('modal-narrative').textContent = e.narrative;
-  document.getElementById('modal-quotes').innerHTML = e.quotes.map(q => `<div class="modal-quote">"${q}"</div>`).join('');
-  document.getElementById('modal-scripture').textContent = e.scripture;
-  document.getElementById('modal-practice-type').style.color = color;
-  document.getElementById('modal-practice-type').textContent = `Contemplative Practice · ${e.practice.type}`;
-  document.getElementById('modal-practice-text').textContent = e.practice.text;
-  checkGate();
-  document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function closeModalOutside(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-
-function toggleIntro() {
-  const box = document.getElementById('intro-box');
-  const btn = document.querySelector('.intro-toggle-btn');
-  box.classList.toggle('open');
-  btn.textContent = box.classList.contains('open') ? 'Close Introduction' : 'Read Introduction';
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-
 // ── EMAIL GATE ────────────────────────────────────────────────────────────
 const GATE_TRIGGER = 3;
 let entriesOpened = 0;
@@ -1277,13 +1240,16 @@ let gateShown = false;
 let gatePassed = sessionStorage.getItem('gate_passed') === 'true';
 
 function checkGate() {
-  if (gatePassed || gateShown) return;
+  // Returns true if gate intercepted (caller should abort)
+  if (gatePassed || gateShown) return false;
   entriesOpened++;
   if (entriesOpened >= GATE_TRIGGER) {
     gateShown = true;
     document.getElementById('gate-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+    return true;
   }
+  return false;
 }
 
 async function gateSubmit() {
@@ -1340,6 +1306,44 @@ function gateClose() {
   }, 400);
 }
 // ─────────────────────────────────────────────────────────────────────────
+
+function openModal(id) {
+  if (checkGate()) return; // gate intercepted — show gate instead of entry
+  const e = ENTRIES.find(x => x.id === id);
+  const color = getCatColor(e.cat);
+  document.getElementById('modal-stripe').style.background = `linear-gradient(90deg,${color},${color}44)`;
+  document.getElementById('modal-eyebrow').textContent = `Entry ${String(e.id).padStart(2,'0')} · ${getCatLabel(e.cat)}`;
+  document.getElementById('modal-title').textContent = e.title;
+  document.getElementById('modal-era').textContent = e.era;
+  document.getElementById('modal-narrative').textContent = e.narrative;
+  document.getElementById('modal-quotes').innerHTML = e.quotes.map(q => `<div class="modal-quote">"${q}"</div>`).join('');
+  document.getElementById('modal-scripture').textContent = e.scripture;
+  document.getElementById('modal-practice-type').style.color = color;
+  document.getElementById('modal-practice-type').textContent = `Contemplative Practice · ${e.practice.type}`;
+  document.getElementById('modal-practice-text').textContent = e.practice.text;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function toggleIntro() {
+  const box = document.getElementById('intro-box');
+  const btn = document.querySelector('.intro-toggle-btn');
+  box.classList.toggle('open');
+  btn.textContent = box.classList.contains('open') ? 'Close Introduction' : 'Read Introduction';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+
 
 renderGrid('all');
 renderStructure();
