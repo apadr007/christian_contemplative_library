@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email } = req.body;
+  const { email, name } = req.body;
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email address' });
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: 'Could not subscribe. Please try again.' });
     }
 
-    // Subscribe to tag with skip_email_confirmation = true (single opt-in)
+    // Subscribe to tag — single opt-in, with name if provided
     const subRes = await fetch(
       `https://api.convertkit.com/v3/tags/${tagId}/subscribe`,
       {
@@ -52,6 +52,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           api_key: API_KEY,
           email: email,
+          first_name: name || '',
           skip_email_confirmation: true
         })
       }
