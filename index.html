@@ -1236,15 +1236,13 @@ function filter(cat, btn) {
 // ── EMAIL GATE ────────────────────────────────────────────────────────────
 const GATE_TRIGGER = 3;
 let entriesOpened = 0;
-let gateShown = false;
-let gatePassed = sessionStorage.getItem('gate_passed') === 'true';
+let gateDone = false;
 
 function checkGate() {
-  // Returns true if gate intercepted (caller should abort)
-  if (gatePassed || gateShown) return false;
+  if (gateDone) return false;
   entriesOpened++;
   if (entriesOpened >= GATE_TRIGGER) {
-    gateShown = true;
+    gateDone = true;
     document.getElementById('gate-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
     return true;
@@ -1254,19 +1252,18 @@ function checkGate() {
 
 async function gateSubmit() {
   const email = document.getElementById('gate-email').value.trim();
-  const msg = document.getElementById('gate-msg');
-  const btn = document.getElementById('gate-submit');
+  const msg   = document.getElementById('gate-msg');
+  const btn   = document.getElementById('gate-submit');
 
   if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
     msg.textContent = 'Please enter a valid email address.';
     return;
   }
-
   btn.disabled = true;
   msg.textContent = 'One moment...';
 
   try {
-    const res = await fetch('/api/subscribe', {
+    const res  = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
@@ -1275,8 +1272,6 @@ async function gateSubmit() {
     if (res.ok) {
       msg.style.color = '#C9A84C';
       msg.textContent = 'Welcome. The exhibition is yours.';
-      sessionStorage.setItem('gate_passed', 'true');
-      gatePassed = true;
       setTimeout(gateClose, 1400);
     } else {
       msg.textContent = data.error || 'Something went wrong. Please try again.';
@@ -1289,8 +1284,6 @@ async function gateSubmit() {
 }
 
 function gateSkip() {
-  sessionStorage.setItem('gate_passed', 'true');
-  gatePassed = true;
   gateClose();
 }
 
