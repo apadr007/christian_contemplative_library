@@ -24,6 +24,12 @@
     --col-medieval: #8A74B8;
     --col-carmelite: #9B5070;
     --col-modern: #4E8A70;
+    --col-orthodox: #7B6FA0;
+    --col-celtic: #4A8A6A;
+    --col-ignatian: #A0622A;
+    --col-protestant: #5A7EA0;
+    --col-women: #A05878;
+    --col-liturgical: #7A6040;
   }
 
   html { scroll-behavior: smooth; }
@@ -497,6 +503,145 @@
     #chat-btn { bottom: 1.2rem; right: 1.2rem; }
   }
 
+
+  /* ── TIMELINE ── */
+  #timeline-panel {
+    display: none;
+    padding: 2rem 1.5rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease;
+  }
+  #timeline-panel.active { display: block; }
+
+  .timeline-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .timeline-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+  .timeline-sub {
+    font-size: 0.78rem; color: var(--text-muted);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  .timeline-era-filter {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+  .tl-era-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted);
+    padding: 0.3rem 0.75rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.8rem; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .tl-era-btn.active, .tl-era-btn:hover {
+    border-color: var(--gold-dim);
+    color: var(--text);
+    background: rgba(201,168,76,0.08);
+  }
+
+  .timeline-axis {
+    position: relative;
+    padding-left: 2.5rem;
+  }
+  .timeline-axis::before {
+    content: '';
+    position: absolute;
+    left: 0.7rem; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim) 5%, var(--gold-dim) 95%, transparent);
+  }
+
+  .tl-era-group { margin-bottom: 2rem; }
+  .tl-era-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+    position: relative;
+  }
+  .tl-era-label::before {
+    content: '';
+    position: absolute;
+    left: -1.85rem; top: 50%;
+    transform: translateY(-50%);
+    width: 8px; height: 8px;
+    border: 1px solid var(--gold);
+    background: var(--bg);
+    border-radius: 50%;
+  }
+
+  .tl-entries {
+    display: flex; flex-direction: column; gap: 0.4rem;
+    padding-left: 0.5rem;
+  }
+  .tl-entry {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+  }
+  .tl-entry:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+  }
+  .tl-entry::before {
+    content: '';
+    position: absolute;
+    left: -1.3rem; top: 50%;
+    transform: translateY(-50%);
+    width: 5px; height: 1px;
+    background: var(--gold-dim);
+  }
+  .tl-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tl-num {
+    font-size: 0.7rem; color: var(--text-muted);
+    min-width: 1.8rem; text-align: right;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .tl-info { flex: 1; min-width: 0; }
+  .tl-title {
+    font-size: 0.88rem; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tl-era-text {
+    font-size: 0.72rem; color: var(--text-muted);
+    font-style: italic;
+  }
+  .tl-cat-badge {
+    font-size: 0.68rem; letter-spacing: 0.06em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+    opacity: 0.8;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .timeline-axis { padding-left: 1.5rem; }
+    .tl-cat-badge { display: none; }
+    .tl-entry::before { left: -0.7rem; }
+  }
+
 </style>
 </head>
 <body>
@@ -507,7 +652,7 @@
   <p class="subtitle">A Digital Exhibition of Christian Contemplative Pointers</p>
   <button class="intro-toggle-btn" onclick="toggleIntro()">Read Introduction</button>
   <div id="intro-box">
-    This digital exhibition gathers thirty contemplative "shewings" from across the Christian tradition — pointers not to miraculous external events, but to the most radical claim of Christian mysticism: that the living God indwells the human soul, and that this indwelling can be consciously entered. Click any entry to open the full record, with its narrative, key quotes, Scripture reference, and a contemplative practice.
+    This digital exhibition gathers 240 contemplative pointers from across twenty centuries and eleven streams of the Christian tradition — from the Desert Fathers to Eastern Orthodox hesychasm, from Celtic thin places to Ignatian discernment, from Protestant mysticism to the Liturgical tradition. Each entry points toward the same radical claim: that the living God indwells the human soul, and that this indwelling can be consciously entered. Click any entry to open the full record. Use the Timeline to explore the tradition chronologically.
   </div>
 </header>
 
@@ -518,14 +663,34 @@
   <button class="nav-btn" onclick="filter('medieval', this)" style="--c:#8A74B8">❋ Medieval Mystics</button>
   <button class="nav-btn" onclick="filter('carmelite', this)" style="--c:#9B5070">✿ Carmelite Tradition</button>
   <button class="nav-btn" onclick="filter('modern', this)" style="--c:#4E8A70">◎ Modern Contemplatives</button>
+  <button class="nav-btn" onclick="filter('orthodox', this)" style="--c:#7B6FA0">☦ Eastern Orthodox</button>
+  <button class="nav-btn" onclick="filter('celtic', this)" style="--c:#4A8A6A">✣ Celtic Christianity</button>
+  <button class="nav-btn" onclick="filter('ignatian', this)" style="--c:#A0622A">✠ Ignatian Tradition</button>
+  <button class="nav-btn" onclick="filter('protestant', this)" style="--c:#5A7EA0">✙ Protestant Mysticism</button>
+  <button class="nav-btn" onclick="filter('women', this)" style="--c:#A05878">✾ Women Mystics</button>
+  <button class="nav-btn" onclick="filter('liturgical', this)" style="--c:#7A6040">✢ Liturgical &amp; Sacramental</button>
+  <button class="nav-btn timeline-btn" onclick="showTimeline()">⟳ Timeline</button>
 </nav>
 
 <div class="grid" id="grid"></div>
 
+<!-- TIMELINE PANEL -->
+<div id="timeline-panel">
+  <div class="timeline-header">
+    <div class="timeline-title">Twenty Centuries of Contemplative Tradition</div>
+    <div class="timeline-sub">240 Entries · Chronological View</div>
+  </div>
+  <div class="timeline-era-filter" id="tl-era-filter">
+    <button class="tl-era-btn active" data-filter="all" onclick="filterTimeline('all',this)">All Eras</button>
+  </div>
+  <div class="timeline-axis" id="timeline-axis"></div>
+</div>
+
+
 <div class="structure">
   <hr class="structure-divider">
   <h2 class="structure-heading">Exhibition Structure</h2>
-  <p class="structure-sub">Five Wings · One Hundred Sixty Entries</p>
+  <p class="structure-sub">Eleven Wings · Two Hundred Forty Entries</p>
   <div class="structure-grid" id="structure-grid"></div>
 </div>
 
@@ -560,11 +725,17 @@
 
 <script>
 const CATS = {
-  scripture:  { label: 'Sacred Scripture',          icon: '✦', color: '#C9A84C' },
-  desert:     { label: 'Desert Fathers & Mothers',  icon: '◈', color: '#C07A4A' },
-  medieval:   { label: 'Medieval Mystics',           icon: '❋', color: '#8A74B8' },
-  carmelite:  { label: 'Carmelite Tradition',        icon: '✿', color: '#9B5070' },
-  modern:     { label: 'Modern Contemplatives',      icon: '◎', color: '#4E8A70' },
+  scripture:   { label: 'Sacred Scripture',             icon: '✦', color: '#C9A84C' },
+  desert:      { label: 'Desert Fathers & Mothers',     icon: '◈', color: '#C07A4A' },
+  medieval:    { label: 'Medieval Mystics',              icon: '❋', color: '#8A74B8' },
+  carmelite:   { label: 'Carmelite Tradition',           icon: '✿', color: '#9B5070' },
+  modern:      { label: 'Modern Contemplatives',         icon: '◎', color: '#4E8A70' },
+  orthodox:    { label: 'Eastern Orthodox',              icon: '☦', color: '#7B6FA0' },
+  celtic:      { label: 'Celtic Christianity',           icon: '✣', color: '#4A8A6A' },
+  ignatian:    { label: 'Ignatian Tradition',            icon: '✠', color: '#A0622A' },
+  protestant:  { label: 'Protestant Mysticism',          icon: '✙', color: '#5A7EA0' },
+  women:       { label: 'Women Mystics',                 icon: '✾', color: '#A05878' },
+  liturgical:  { label: 'Liturgical & Sacramental',     icon: '✢', color: '#7A6040' },
 };
 
 var ENTRIES = [
@@ -1749,16 +1920,339 @@ practice:{type:'Cosmic Contemplation',text:'Rohr\'s practice: go outside and spe
 narrative:'You have arrived at the final entry of this expanded exhibition — 190 contemplative pointers gathered from across twenty centuries, five wings, and the entire geography of the Christian mystical tradition. Every figure represented here — from the Desert Fathers crying out in the Egyptian wilderness to Dag Hammarskjöld navigating Cold War diplomacy, from Hildegard composing her visions in the Rhineland to Thérèse dying in a Normandy infirmary — was pointing toward the same reality: the God who indwells, the divine presence that is not distant but intimate, not achieved but consented to, not constructed but uncovered in the soul\'s own center. The exhibition is not the destination. It is the threshold. The contemplative tradition has one final word for those who have come this far: begin.',
 quotes:['The contemplative is not a special kind of person. Every person is a special kind of contemplative. (Thomas Merton, New Seeds of Contemplation, paraphrase)','You have made us for yourself, O Lord, and our heart is restless until it rests in you. (Augustine, Confessions I.1)'],
 scripture:'Revelation 22:17; Matthew 11:28–30; John 7:37–38; Isaiah 55:1–3; Psalm 27:8',
-practice:{type:'Beginning',text:'This is the only practice this final entry offers: begin. Choose one contemplative practice from the 190 entries you have now encountered. Commit to it for 30 days — 20 minutes each morning, in the same place, at the same time. Not perfectly. Not dramatically. Just consistently. The entire tradition speaks with one voice on this point: the spiritual life is not a set of experiences to be collected but a direction to be taken, daily, one step at a time. The step is available to you now. Begin.'}}
+practice:{type:'Beginning',text:'This is the only practice this final entry offers: begin. Choose one contemplative practice from the 190 entries you have now encountered. Commit to it for 30 days — 20 minutes each morning, in the same place, at the same time. Not perfectly. Not dramatically. Just consistently. The entire tradition speaks with one voice on this point: the spiritual life is not a set of experiences to be collected but a direction to be taken, daily, one step at a time. The step is available to you now. Begin.'}},
+
+// ── EASTERN ORTHODOX (cat:'orthodox') ────────────────────────────────────
+
+{id:191,cat:'orthodox',title:'Symeon the New Theologian: The Vision of Divine Light',era:'c. 1000 AD — Symeon the New Theologian',
+narrative:'Symeon the New Theologian (949–1022), the Byzantine monk and mystic, is one of the most daring voices in the Orthodox tradition — a theologian who insisted that direct personal experience of the divine light is not reserved for saints of the past but is available to every Christian who genuinely seeks it. His Hymns of Divine Love are among the most intimate mystical poems in any Christian tradition: rapturous, personal, specific about the experience of light flooding the soul. Against the theological academicism of his day, Symeon argued that theology without experience is speculation, and that the Church\'s tradition of mystical encounter with God is not merely historical but living and accessible in every generation.',
+quotes:['I know a man in Christ who was taken up into the divine light... I myself am this man. (Symeon, Ethical Discourses 1)','Do not say that it is impossible to receive the Spirit of God. Do not say that without Him it is possible to be saved. (Symeon, Catecheses 33)'],
+scripture:'John 1:9; 2 Corinthians 4:6; Matthew 5:8; 1 John 1:5; Acts 2:17',
+practice:{type:'Openness to Divine Light',text:'Symeon\'s invitation: do not read about the vision of divine light as a historical phenomenon belonging to ancient saints. Sit for 20 minutes with genuine openness to the possibility that the same divine light is available to you — not as an ecstatic experience you manufacture but as a gift you consent to receive. Ask simply: "Show me what you wish to show me." Then wait with open attention, without directing or evaluating what arises.'}},
+
+{id:192,cat:'orthodox',title:'Gregory Palamas: Uncreated Light and Theosis',era:'14th Century — Gregory Palamas',
+narrative:'Gregory Palamas (1296–1359), the Hesychast monk of Mount Athos who became Archbishop of Thessaloniki, developed the most rigorous theological defense of the Orthodox mystical tradition in the crucial distinction between the divine essence and divine energies. God\'s essence remains forever unknowable and unapproachable; but the divine energies — the uncreated light, the divine life itself flowing outward — can be genuinely participated in by human beings. The light the disciples saw on Tabor was not a created phenomenon but the uncreated divine light itself. This theology of theosis — genuine participation in divine life — is the Orthodox answer to the Western question of how union with God is possible without confusion of natures.',
+quotes:['The light of Tabor was not a created light, not a sensory light, but the uncreated light of God\'s own glory. (Palamas, Triads II.3)','God is called light not with respect to His essence but with respect to His energy. (Palamas, Triads III.1)'],
+scripture:'Matthew 17:2; 2 Peter 1:4; 1 John 3:2; Exodus 34:29–35; 2 Corinthians 3:18',
+practice:{type:'Tabor Light Contemplation',text:'Palamas\'s theology invites a specific contemplative posture: the divine light is not a metaphor but a reality the purified soul can genuinely encounter. Sit for 20 minutes in complete stillness. Do not seek visions or experiences. Simply rest in the awareness that the uncreated light — the very life of God — is already present in and around you, not as something you perceive with the senses but as the ground of your existence. Ask to be made more transparent to it.'}},
+
+{id:193,cat:'orthodox',title:'Seraphim of Sarov: Acquiring the Holy Spirit',era:'19th Century — Seraphim of Sarov',
+narrative:'Seraphim of Sarov (1754–1833) — the beloved Russian hermit, monk, and mystic — is perhaps the most accessible figure in the Orthodox contemplative tradition for Western readers. His famous conversation with Nicholas Motovilov, in which Motovilov witnesses Seraphim\'s transfiguration by divine light in a winter forest, became one of the most widely read accounts of mystical experience in modern Christianity. Seraphim\'s central teaching was disarmingly simple: "The true aim of the Christian life is the acquisition of the Holy Spirit." Everything else — fasting, prayer, vigils, almsgiving — is a means to this single end. His greeting to every visitor — "My joy!" — expressed the permanent interior state that this acquisition produces.',
+quotes:['Acquire the Holy Spirit and a thousand around you will be saved. (Seraphim of Sarov, Conversation with Motovilov)','Peace of soul is above all things. (Seraphim, Instructions)'],
+scripture:'Acts 1:8; Romans 8:9–11; 1 Corinthians 6:19; Galatians 5:22–23; John 20:22',
+practice:{type:'Acquisition of the Spirit',text:'Seraphim\'s question reframes every spiritual practice: am I doing this to acquire the Holy Spirit, or for some other reason — duty, habit, comfort, reputation? Sit for 15 minutes with this question applied to your primary spiritual practice. Then pray Seraphim\'s simple prayer: "O Lord, grant me the grace of your Holy Spirit." Notice: this prayer has no conditions, no qualifications, no performance attached. It is pure asking from pure poverty.'}},
+
+{id:194,cat:'orthodox',title:'The Philokalia: Love of the Beautiful',era:'4th–14th Century — Eastern Tradition',
+narrative:'The Philokalia — compiled by Nikodemos of the Holy Mountain and Makarios of Corinth in 1782 — is the great treasury of Eastern Christian contemplative writing, gathering texts from the 4th to the 14th century on the practice of hesychia, the Jesus Prayer, and the purification of the nous (mind/heart). Its title means "love of the beautiful" — pointing toward the Orthodox conviction that the spiritual life is fundamentally an aesthetic and erotic movement toward the divine Beauty. The Philokalia\'s influence on 19th-century Russian spirituality produced The Way of a Pilgrim, the most widely read introduction to the Jesus Prayer in the modern world, and through it the hesychast tradition entered Western consciousness.',
+quotes:['Attention is the heart\'s stillness, unbroken by any thought. (Hesychios the Priest, Philokalia I)','The goal of our Christian life is the acquisition of the Holy Spirit of God. (Seraphim of Sarov, quoting the Philokalia tradition)'],
+scripture:'Proverbs 4:23; Matthew 5:8; Romans 8:6; Philippians 4:7; 1 Thessalonians 5:17',
+practice:{type:'Philokalia Study',text:'Obtain Volume 1 of the Philokalia (Palmer, Sherrard, and Ware translation). Begin with Hesychios the Priest\'s "On Watchfulness and Holiness" — it is short, practical, and immediately applicable. Read one section per day, returning to it throughout the day. The Philokalia is not designed for rapid reading but for slow absorption over years. Consider it a companion for a lifetime rather than a book to finish.'}},
+
+{id:195,cat:'orthodox',title:'John Climacus: The Ladder of Divine Ascent',era:'7th Century — John Climacus',
+narrative:'John Climacus (c. 579–649), abbot of Saint Catherine\'s Monastery on Mount Sinai, wrote The Ladder of Divine Ascent — one of the most influential spiritual texts in the Orthodox tradition, read aloud in Orthodox monasteries during Lent to this day. The Ladder describes 30 rungs of spiritual ascent from renunciation of the world to the summit of love, where the three theological virtues — faith, hope, and love — converge. The image of a ladder stretching from earth to heaven, with monks climbing and demons pulling them off, became one of the defining icons of Eastern Christian spirituality. The Ladder\'s realism about the difficulty of the ascent — and its compassion for those who fall — made it beloved across centuries.',
+quotes:['Just as the sun rises equally over all, so the divine light shines in all souls. But the soul that has more capacity for God receives more. (Climacus, Ladder Step 26)','Hesychia is a laying aside of thoughts. (Climacus, Ladder Step 27)'],
+scripture:'Genesis 28:12; John 1:51; Philippians 3:14; Hebrews 12:1–2; Psalm 84:5–7',
+practice:{type:'Ladder Examination',text:'John\'s Ladder identifies 30 specific interior movements — from renunciation through humility, discernment, and stillness to love. His most famous step is Step 7 on "mourning" (penthos) — the grief-joy of the soul that sees clearly both its distance from God and God\'s inexhaustible approach. Spend 20 minutes with this dual awareness: where are you on the ladder? Not to judge but to locate yourself honestly, as a traveler consults a map.'}},
+
+{id:196,cat:'orthodox',title:'Maximus the Confessor: The Cosmic Liturgy',era:'7th Century — Maximus the Confessor',
+narrative:'Maximus the Confessor (580–662) — who died after torture for refusing to endorse the Monothelite heresy — developed the most comprehensive synthesis of Eastern Christian theology and mystical philosophy in the patristic era. His Mystagogy reads the Christian liturgy as a cosmic event: the church building images the entire cosmos, the nave and sanctuary represent earth and heaven, and the liturgical action enacts the soul\'s journey from multiplicity to unity in God. For Maximus, the spiritual life and the cosmic order are the same movement at different scales: the soul returning to God is the cosmos returning to its source. His doctrine of the logoi — the divine reasons embedded in all created things — grounds a contemplative engagement with the natural world.',
+quotes:['The whole world is a single church, and the church is a microcosm of the entire world. (Maximus, Mystagogy 2)','God always and in all things becomes human. (Maximus, Ambigua 7)'],
+scripture:'Colossians 1:15–20; Ephesians 1:10; John 1:3–4; Romans 8:19–22; Revelation 21:1–5',
+practice:{type:'Mystagogical Presence',text:'Maximus\'s mystagogy: attend a liturgical service — any Christian service — with his lens. The building is the cosmos. The gathered people are the soul\'s multiplicity being gathered toward unity. The central action is the soul\'s movement toward God enacted in time. Attend not merely as a participant but as someone reading the cosmic liturgy. What does the physical space, the movement, the words reveal about the soul\'s own journey?'}},
+
+{id:197,cat:'orthodox',title:'Hesychasm: The Prayer of the Heart',era:'4th Century Onward — Eastern Tradition',
+narrative:'Hesychasm — from the Greek hesychia, stillness — is the central contemplative tradition of Eastern Christianity, the practice of interior stillness through which the nous (the spiritual intellect or heart) is purified and becomes capable of perceiving God. The hesychast tradition developed across centuries in the Egyptian and Syrian deserts, was systematized by Evagrius Ponticus and John Cassian, refined by the Sinaitic monks, and reached its theological apex in Gregory Palamas\'s defense of the monks of Mount Athos. Its central practice — the Jesus Prayer coordinated with the breath and the descent of attention from the head into the heart — is one of the most carefully developed contemplative methods in the Christian tradition.',
+quotes:['Seek to enter the cell within your heart, and you will see the cell of heaven. (Theophan the Recluse, The Art of Prayer)','Stillness is the putting aside of all thoughts for a set time, for the sake of a greater good. (John Climacus, Ladder 27)'],
+scripture:'1 Kings 19:12; Psalm 46:10; Matthew 6:6; Romans 8:26; Habakkuk 2:20',
+practice:{type:'Descent into the Heart',text:'The hesychast practice of descending from the head into the heart: sit upright, breathe slowly. For 5 minutes, simply observe the stream of thoughts in the head — without engaging them. Then, with each slow exhale, imagine attention descending from the head into the center of the chest. Rest there, below the level of discursive thought, in what the hesychasts call "the heart." When thought pulls you back up, descend again gently. Practice this daily for two weeks.'}},
+
+{id:198,cat:'orthodox',title:'Theophan the Recluse: The Art of Prayer',era:'19th Century — Theophan the Recluse',
+narrative:'Theophan the Recluse (1815–1894), the Russian Orthodox bishop who spent the last 28 years of his life in solitary enclosure, compiled and transmitted the Philokalia tradition to modern Russian Orthodox Christianity. His collected letters — gathered as The Art of Prayer — constitute one of the most practical guides to the interior life in the entire tradition. Theophan\'s central teaching: prayer must descend from the lips to the mind, and from the mind into the heart, before it becomes genuine prayer. The goal is "standing before God with the mind in the heart" — a state of continuous interior orientation toward God that Theophan considered not reserved for monks but available to any serious Christian.',
+quotes:['The principal thing is to stand before God with the mind in the heart, and to go on standing before Him unceasingly day and night, until the end of life. (Theophan, The Art of Prayer)','Warm your heart with prayer, and all will be well. (Theophan, Letters)'],
+scripture:'1 Thessalonians 5:17; Romans 8:26–27; Psalm 27:8; Luke 18:1; Colossians 4:2',
+practice:{type:'Standing Before God',text:'Theophan\'s three-stage movement: lips → mind → heart. Begin your prayer period by saying your prayer aloud (lips). Then repeat it silently in the mind, attending carefully to its meaning. Finally, attempt to "carry" the prayer down into the chest — into the felt center of the person — and pray it from there. Theophan believed this third stage is what transforms recitation into genuine prayer. Even 5 minutes of prayer from this depth is worth more than an hour from the lips alone.'}},
+
+{id:199,cat:'orthodox',title:'The Way of a Pilgrim: Continuous Prayer',era:'19th Century — Anonymous Russian',
+narrative:'The Way of a Pilgrim is an anonymous 19th-century Russian spiritual classic describing a peasant\'s quest to discover the meaning of Paul\'s injunction to "pray without ceasing." A startnik (wandering spiritual elder) teaches him the Jesus Prayer, and the pilgrim spends the rest of the narrative walking across Russia, practicing the prayer until it becomes self-active — continuing in the heart even during sleep. The book became, for the 20th century West (it was published in English in 1930 and famously referenced in J.D. Salinger\'s Franny and Zooey), the primary introduction to hesychasm and the Jesus Prayer, carrying the Desert tradition into the modern secular world through the most unexpected channel.',
+quotes:['Sitting down in my lonely hut I put myself to school and began to learn to pray without ceasing, just as I had been taught. (The Way of a Pilgrim)','By degrees with the help of God I attained that state... the prayer never ceased in my heart. (The Way of a Pilgrim)'],
+scripture:'1 Thessalonians 5:17; Luke 18:1; Ephesians 6:18; Romans 12:12; Acts 6:4',
+practice:{type:'Pilgrim\'s Practice',text:'The Pilgrim\'s method: begin with 3,000 repetitions of the Jesus Prayer per day (approximately 30 minutes). After a week, increase to 6,000. After another week, to 12,000. The number is not the point — the repetition is a training in continuity. Many practitioners find that after several weeks of daily practice the prayer begins to arise spontaneously between formal sessions. This is the beginning of what the Pilgrim calls the "self-active" prayer.'}},
+
+{id:200,cat:'orthodox',title:'The Optina Elders: Spiritual Direction as Charism',era:'19th Century — Optina Pustyn Monastery',
+narrative:'Optina Pustyn — the great Russian monastery that flourished in the 19th century — produced a line of startsy (spiritual elders) whose influence shaped Russian culture far beyond the monastery walls. Dostoevsky based Father Zosima in The Brothers Karamazov on the Optina elder Ambrose. Tolstoy visited repeatedly. The startsy — Macarius, Ambrose, Nikon, Anatoly — practiced a form of spiritual direction that was simultaneously therapeutic, prophetic, and contemplative: they listened with extraordinary attention, saw through appearances to the soul\'s actual condition, and spoke with what witnesses consistently described as charismatic authority. Their tradition represents the Eastern Christian understanding of holiness as a gift that radiates outward, transforming everyone who comes into contact with it.',
+quotes:['Do not be troubled. Do not be despairing. All will pass, all will end. Only love remains. (Elder Ambrose of Optina)','A joyful spirit is half of health. (Elder Ambrose, Sayings)'],
+scripture:'Galatians 6:2; James 5:14–16; 1 Corinthians 12:28; Romans 15:14; Hebrews 13:17',
+practice:{type:'Seeking an Elder',text:'The Optina tradition: seek out, deliberately and persistently, a person whose spiritual wisdom exceeds your own — not necessarily a priest or official religious figure, but someone whose life demonstrates the fruits of genuine interior transformation. Ask them for guidance. The startsy tradition holds that the soul cannot navigate the interior life entirely alone — not because God is insufficient but because humility requires the willingness to be seen and guided by another.'}},
+
+
+// ── CELTIC CHRISTIANITY (cat:'celtic') ───────────────────────────────────
+
+{id:201,cat:'celtic',title:'Patrick: The Breastplate Prayer',era:'5th Century — Patrick of Ireland',
+narrative:'Patrick of Ireland (c. 387–461) — former slave, bishop, missionary, and one of the most transformative figures in Christian history — left two authentic writings: the Confessio and the Letter to Coroticus. The prayer attributed to him, the Lorica or Breastplate, whether or not literally his, captures the essential spirit of Celtic Christian spirituality: a prayer of encircling, of wrapping the whole person and the whole day in divine presence. "Christ with me, Christ before me, Christ behind me, Christ in me, Christ beneath me, Christ above me, Christ on my right, Christ on my left..." The spatial comprehensiveness of this prayer — Christ in every direction — reflects the Celtic sense that the divine is not located in special places but permeates all space and time.',
+quotes:['Christ with me, Christ before me, Christ behind me, Christ in me, Christ beneath me, Christ above me. (Patrick\'s Breastplate, traditional)','I arise today through the strength of heaven: light of sun, radiance of moon, splendor of fire. (Patrick\'s Breastplate)'],
+scripture:'Psalm 139:7–10; Colossians 1:17; Acts 17:28; Romans 8:38–39; Matthew 28:20',
+practice:{type:'Breastplate Prayer',text:'Pray the Breastplate of Patrick slowly in the morning — the full text is freely available online and takes about 3 minutes to read. Attend especially to its spatial comprehensiveness: Christ before, behind, beneath, above, on right and left, within. The practice is not an incantation but a deliberate recalibration of attention: every direction you will face today is already inhabited by divine presence. Begin the day from this awareness.'}},
+
+{id:202,cat:'celtic',title:'Columba: The Thin Places',era:'6th Century — Columba of Iona',
+narrative:'Columba (521–597) — the Irish monk who founded the monastery of Iona off the Scottish coast, which became one of the great centers of Celtic Christianity — embodied the Celtic conviction that certain places are "thin" — where the membrane between the visible and invisible worlds is unusually permeable. The Celtic tradition did not locate the sacred only in church buildings or formal religious contexts; it saw the divine breaking through in headlands, islands, forests, rivers, and crossing places. Iona itself — bare, windswept, at the edge of the known world — was experienced as a thin place where prayer felt more immediate and the divine more present. This theology of sacred space is one of Celtic Christianity\'s most distinctive and enduring contributions.',
+quotes:['In Iona of my heart, Iona of my love, instead of monks\' voices shall be lowing of cattle; but ere the world come to an end, Iona shall be as it was. (Attributed to Columba)','Christ is in the heart of every man who thinks of me. (Attributed to Columba)'],
+scripture:'Genesis 28:16–17; Exodus 3:5; Psalm 24:1; Acts 17:27; Matthew 18:20',
+practice:{type:'Finding Thin Places',text:'Celtic spirituality invites a deliberate geography of prayer: identify places in your own life where you consistently feel more permeable to God — where prayer comes more easily, attention sharpens, the interior life feels more alive. These are your personal thin places. Cultivate them deliberately: return to them, pray in them, bring your most important questions to them. The Celtic tradition held that the landscape itself participates in the soul\'s spiritual life.'}},
+
+{id:203,cat:'celtic',title:'Brigid of Kildare: Hospitality as Holiness',era:'5th–6th Century — Brigid of Kildare',
+narrative:'Brigid of Kildare (c. 451–525) — abbess, founder of the monastery of Kildare, and one of the three patron saints of Ireland — embodied the Celtic Christian synthesis of radical hospitality and deep contemplative life. The stories told about her center almost entirely on extravagant generosity: giving away food, clothing, livestock, and eventually sacred objects, always from a sense that the poor person before her was Christ himself. Brigid\'s monastery maintained a perpetual flame — an eternal light that burned for centuries as a symbol of the divine fire that the contemplative life tends in the world. Her tradition insists that the mystical and the practical are not separable: the most genuinely contemplative person is the most genuinely hospitable.',
+quotes:['I would like the angels of Heaven to be among us. I would like an abundance of peace. I would like full vessels of charity. (Brigid, traditional prayer)','I would like a great lake of beer for the King of Kings; I would like to be watching Heaven\'s family drinking it through all eternity. (Brigid, Poem of the Gifts)'],
+scripture:'Matthew 25:35–40; Romans 12:13; Hebrews 13:2; 1 Peter 4:9; Luke 14:13–14',
+practice:{type:'Hospitality Practice',text:'Brigid\'s practice: this week, practice one act of hospitality that costs you something — not mere convenience but genuine expenditure of time, energy, or resources. Then, while doing it, hold the Celtic awareness: the person before you is Christ. Not metaphorically. Literally. Brigid\'s tradition: the more genuinely you hold this awareness, the more the act of hospitality becomes itself a form of contemplative encounter with the divine.'}},
+
+{id:204,cat:'celtic',title:'The Carmina Gadelica: Prayers of the Everyday',era:'c. 100–1900 AD — Scottish Gaelic Tradition',
+narrative:'The Carmina Gadelica — collected by Alexander Carmichael in the Scottish Highlands and Islands between 1860 and 1909 — is the great treasury of Celtic oral prayer, preserved in a culture that had maintained an unbroken tradition of blessing, invocation, and thanksgiving woven into every activity of daily life. The collection includes prayers for kindling the fire, milking the cow, going to sleep, waking, fishing, weaving, and walking. What strikes every reader is the absolute integration of sacred and secular: there is no activity too small or too mundane to become a prayer. The Celtic tradition did not separate contemplative life from ordinary life — it baptized ordinary life entirely.',
+quotes:['I will kindle my fire this morning, in presence of the holy angels of heaven. (Carmina Gadelica, Kindling Prayer)','Be the great God between thy two shoulders, to protect thee in thy going and in thy coming. (Carmina Gadelica, Journey Blessing)'],
+scripture:'1 Corinthians 10:31; Colossians 3:17; 1 Thessalonians 5:18; Romans 12:11; Psalm 16:8',
+practice:{type:'Woven Prayer',text:'The Carmina Gadelica practice: compose a short blessing prayer for one ordinary daily action — making coffee, starting the car, opening the laptop. Three lines are enough. Pray it every day for one month before performing that action. The Celtic tradition: prayer is not something added to life; it is the fabric of life, woven into its texture. Begin with one thread.'}},
+
+{id:205,cat:'celtic',title:'John Scotus Eriugena: The Return of All Things',era:'9th Century — John Scotus Eriugena',
+narrative:'John Scotus Eriugena (c. 815–877) — the Irish philosopher and theologian at the court of Charles the Bald — wrote the most ambitious work of Christian philosophical theology between Augustine and Aquinas: the Periphyseon (On the Division of Nature). His theological vision is simultaneously cosmological and mystical: all creation flows out from God (exitus) and is destined to return to God (reditus) in an eschatological apokatastasis in which all things are restored to their divine source. His synthesis of Pseudo-Dionysius, the Cappadocians, and Neoplatonism with Celtic sensibility produced a theology of radical immanence: God is not merely present in creation — God is the being of all things.',
+quotes:['God is the being of all things, for He alone truly is. (Eriugena, Periphyseon I)','We shall not see God and creation separately, for God will be all in all. (Eriugena, Periphyseon V)'],
+scripture:'Acts 17:28; Romans 11:36; 1 Corinthians 15:28; Colossians 1:16–17; Revelation 21:5',
+practice:{type:'Return to Source',text:'Eriugena\'s contemplation: all things are in a continuous movement of return to their divine source — including you. Sit for 20 minutes with this awareness: your deepest nature is not moving away from God but toward God, drawn by the same gravity that draws all creation home. The spiritual life is not effort against your nature but alignment with your nature\'s deepest direction. What would you do differently if you trusted this return as already underway?'}},
+
+{id:206,cat:'celtic',title:'Peregrinatio: The Sacred Wandering',era:'6th–8th Century — Celtic Monastic Tradition',
+narrative:'The Celtic practice of peregrinatio — voluntary exile and wandering for the love of God — produced some of the most daring missionary and contemplative figures in Christian history. Columba leaving Ireland for Iona, Columbanus crossing into Frankish Gaul, Brendan sailing into the unknown Atlantic: these were not merely missionary journeys but contemplative acts of radical self-abandonment. The peregrinus threw away the security of home, tribe, and familiarity to place themselves entirely in God\'s hands. The sea — vast, unpredictable, beyond human control — became the ultimate metaphor for the soul\'s surrender to divine providence. The Irish monks called it "white martyrdom": the death of the self without the shedding of blood.',
+quotes:['To go on a pilgrimage is to throw yourself on God. (Celtic monastic saying)','The perfect pilgrimage is to leave one\'s homeland for the love of God, without any intention of returning. (Columbanus, Instructions)'],
+scripture:'Genesis 12:1; Hebrews 11:8–10; Luke 9:58; Matthew 19:29; Philippians 3:20',
+practice:{type:'Interior Peregrinatio',text:'Most of us cannot literally sail into the unknown Atlantic. But the spirit of peregrinatio — voluntary release of security for the sake of deeper trust in God — is available in any life. Identify one area where you are clinging to security, familiarity, or certainty in a way that is preventing spiritual growth. Sit for 20 minutes with what it would mean to release it — not recklessly but in the spirit of the Celtic peregrinus: placing yourself in God\'s hands and sailing.'}},
+
+{id:207,cat:'celtic',title:'The Lorica Tradition: Encircling Prayer',era:'6th–9th Century — Celtic Christianity',
+narrative:'The lorica (breastplate or encircling prayer) is one of the most distinctive forms in the Celtic contemplative tradition: a prayer that surrounds the person with divine protection and presence at every point of vulnerability — body, soul, relationships, journey. The lorica tradition reflects the Celtic theological conviction that the spiritual life is not primarily about ascending to God but about recognizing that God already encircles the soul. The divine protection is not earned through prayer but acknowledged through it: the lorica makes explicit what is already the case. This theology of encirclement — God surrounding the soul before it calls — runs throughout Celtic Christian prayer and connects to the Orthodox theology of divine immanence.',
+quotes:['God to enfold me, God to surround me, God in my speaking, God in my thinking. (Carmina Gadelica, Encompassing)','The encircling of God be about my feet, each step I take. (Carmina Gadelica)'],
+scripture:'Psalm 125:2; Isaiah 52:12; Deuteronomy 33:27; Zechariah 2:5; Romans 8:38–39',
+practice:{type:'Encircling Prayer',text:'Write your own lorica: a short prayer that names the specific vulnerabilities and relationships of your life and encircles each one with divine presence. Name your body, your work, your closest relationships, your fears, your current challenges — and around each one, draw the circle of divine presence. Pray it each morning for one month. The Celtic tradition: the prayer does not create the protection — it wakes you up to it.'}},
+
+{id:208,cat:'celtic',title:'Iona Community: Ancient Future Spirituality',era:'1938 — George MacLeod and the Iona Community',
+narrative:'The Iona Community, founded by George MacLeod in 1938 on the island of Columba\'s ancient monastery, represents the most significant modern revival of Celtic Christian spirituality. MacLeod — a Church of Scotland minister who had served in the Glasgow slums — brought unemployed craftsmen and trainee ministers to rebuild the ruined Abbey on Iona as a symbol of the integration of worship, work, and justice. The Community\'s spirituality, rooted in Celtic tradition and contemporary social engagement, has influenced worship renewal, ecological theology, and justice-oriented contemplative practice across the English-speaking world. Its daily office, liturgies, and commitment to the integration of sacred and secular carry the ancient Celtic vision into the present.',
+quotes:['We are all made for one another. (George MacLeod, founder of the Iona Community)','Matter matters. The Word became flesh, not a nice idea. (MacLeod, characteristic saying)'],
+scripture:'John 1:14; Isaiah 58:6–7; Micah 6:8; James 2:14–17; Matthew 25:40',
+practice:{type:'Matter Matters',text:'MacLeod\'s Celtic insight: the spiritual life is not about escaping matter but about recognizing matter as the medium of divine presence. For one week, practice attending to one physical, material thing each day as a site of divine disclosure: food, wood, water, stone, body. The Celtic tradition does not spiritualize creation — it incarnates prayer into it. Ask: where is God showing up in the physical texture of my life today?'}},
+
+
+// ── IGNATIAN TRADITION (cat:'ignatian') ──────────────────────────────────
+
+{id:209,cat:'ignatian',title:'Ignatius of Loyola: Finding God in All Things',era:'16th Century — Ignatius of Loyola',
+narrative:'Ignatius of Loyola (1491–1556) — Spanish soldier, mystic, and founder of the Society of Jesus — experienced a profound conversion during his convalescence from a battle wound at Pamplona in 1521. Reading lives of the saints for lack of other entertainment, he noticed different interior movements arising in response to different thoughts: some thoughts left him dry and empty; others left him animated and at peace. This observation — that God communicates through interior movements of consolation and desolation — became the foundation of Ignatian discernment and the entire Spiritual Exercises. Ignatius\'s spirituality is contemplative in action: its goal is not withdrawal from the world but the capacity to find God in every situation, relationship, and activity.',
+quotes:['Go, set the world on fire. (Attributed to Ignatius of Loyola)','Act as if everything depended on you; trust as if everything depended on God. (Attributed to Ignatius)'],
+scripture:'Romans 8:28; 1 Corinthians 10:31; Colossians 3:17; Acts 17:28; Psalm 139:7–10',
+practice:{type:'Finding God in All Things',text:'Ignatius\'s foundational practice: at the end of each day, review it with the question "Where did I find God today?" — not in explicitly religious moments only but in conversations, decisions, frustrations, pleasures, and surprises. The Ignatian tradition calls this the Examen. Spend 10 minutes in this review each evening for one month. Ignatius promised: the person who practices the Examen consistently will find their awareness of divine presence in ordinary life gradually and permanently expanding.'}},
+
+{id:210,cat:'ignatian',title:'The Spiritual Exercises: A School of Desire',era:'1522–1548 — Ignatius of Loyola',
+narrative:'The Spiritual Exercises of Ignatius of Loyola — developed over the years following his conversion and codified between 1522 and 1548 — are one of the most carefully designed systems of contemplative formation in the Christian tradition. The full Exercises, made in a 30-day retreat, move through four "Weeks" (stages): the grace of knowing oneself as loved despite sin; encountering Christ in the Incarnation and ministry; accompanying Christ through the Passion; and being sent with the Risen Christ into the world. The Exercises are not primarily a set of techniques but a school of desire: they aim to purify and reorder what the person most deeply wants, so that desire becomes aligned with divine will.',
+quotes:['Ask for what you desire. (Ignatius, Spiritual Exercises, repeated instruction)','The Exercises are given so that the exercitant may be better able to find the will of God. (Ignatius, Annotation 1)'],
+scripture:'Psalm 37:4; Matthew 6:33; John 15:7; Romans 12:2; Philippians 4:6–7',
+practice:{type:'Asking for What You Desire',text:'Ignatius\'s most countercultural instruction: before each prayer period, explicitly name what you are asking God for. Not what you think you should ask for — what you actually desire. The Exercises trust that honest desire, brought into God\'s presence, is itself the beginning of purification. Spend 5 minutes before your next prayer period asking: what do I actually want from this time? Name it honestly. Then offer it to God and pray.'}},
+
+{id:211,cat:'ignatian',title:'The Examen: A Review of the Day',era:'16th Century — Ignatian Tradition',
+narrative:'The Examen is the single most practical contribution of the Ignatian tradition to daily contemplative life: a 10–15 minute daily review that trains the soul to recognize divine movement in the texture of ordinary experience. Ignatius considered it so essential that he told his Jesuits: if you must choose between the Examen and any other prayer practice, keep the Examen. Its five movements — gratitude, review, attention to consolation and desolation, response, and forward look — create a daily rhythm of reflective consciousness that gradually transforms perception. Many practitioners find that after months of daily Examen practice their awareness of God in ordinary life is qualitatively different.',
+quotes:['The Examen is the practice by which we learn to read the text of our own experience. (George Aschenbrenner SJ, Consciousness Examen)','Let the one who is in consolation think about how he will conduct himself in future desolation. (Ignatius, Spiritual Exercises 323)'],
+scripture:'Lamentations 3:40; Psalm 26:2; 1 Corinthians 11:28; 2 Corinthians 13:5; Proverbs 4:26',
+practice:{type:'Daily Examen',text:'The five-movement Examen: (1) Gratitude — what am I grateful for from today? (2) Review — walk through the day chronologically. (3) Attention — where did I feel drawn toward God (consolation)? Where did I feel pulled away (desolation)? (4) Response — acknowledge any failure honestly, without spiraling. (5) Forward — what do I want to carry into tomorrow? Practice this for 10 minutes each evening for 30 days before evaluating it.'}},
+
+{id:212,cat:'ignatian',title:'Consolation and Desolation: Interior Weather',era:'16th Century — Ignatius of Loyola',
+narrative:'Ignatius\'s Rules for the Discernment of Spirits — embedded in the Spiritual Exercises — constitute the most systematic psychological analysis of interior spiritual movements in the Western tradition before modern depth psychology. His distinction between consolation (interior movements that draw the soul toward God, increasing faith, hope, and love) and desolation (movements that pull away from God, increasing anxiety, confusion, and darkness) provided a practical framework for navigating the interior life that has proved remarkably durable. The Rules specify not only how to identify these movements but how to respond: in consolation, prepare for future desolation; in desolation, do not make major changes, increase prayer, and wait.',
+quotes:['In time of desolation one should never make a change, but stand firm and constant in the resolutions and determinations in which one was on the day before the desolation. (Ignatius, SE 318)','It is the mark of the evil spirit to take on the appearance of an angel of light. (Ignatius, SE 332)'],
+scripture:'1 John 4:1; 1 Corinthians 12:10; 1 Thessalonians 5:21; Hebrews 5:14; Romans 12:2',
+practice:{type:'Discernment Journal',text:'For two weeks, keep a brief daily record of your interior movements: note moments of consolation (peace, expansion, clarity, warmth, increased desire for God) and desolation (contraction, anxiety, dryness, confusion, decreased desire for God). Do not immediately interpret them — simply observe and record. After two weeks, look for patterns: what consistently precedes consolation? What precedes desolation? Ignatius believed this pattern-recognition is the foundation of all genuine spiritual discernment.'}},
+
+{id:213,cat:'ignatian',title:'Contemplation on the Incarnation',era:'16th Century — Spiritual Exercises Week 2',
+narrative:'The Contemplation on the Incarnation — the opening exercise of the Second Week — invites the retreatant into a specific form of imaginative prayer that became the hallmark of Ignatian contemplation. The exercitant is asked to imagine the entire Trinity looking down on the world — seeing its violence, confusion, and suffering — and deciding: "Let us work the redemption of the human race." Then the angel approaches Mary. The soul is placed not as an observer but as a participant in the scene — what Ignatius calls the "composition of place." This imaginative engagement with scripture is not creative fantasy but a form of prayer in which the whole person — senses, emotions, intellect, will — is brought into contact with the mystery.',
+quotes:['See the persons: first, those on the face of the earth, in such variety of dress and manners... (Ignatius, SE 106)','Ask for an intimate knowledge of our Lord, who has become human for me, that I may love Him more and follow Him more closely. (Ignatius, SE 104)'],
+scripture:'Luke 1:26–38; John 1:14; Philippians 2:6–8; Galatians 4:4–5; Matthew 1:23',
+practice:{type:'Ignatian Imaginative Prayer',text:'Choose a Gospel scene — the Annunciation, the calling of the disciples, the feeding of the multitude — and enter it imaginatively. Do not read about it — place yourself in it. Use all five senses: what do you see, hear, smell, feel? Position yourself not as a camera but as a participant — a bystander, a disciple, a person in the crowd. Then observe what arises. Ask what the scene is revealing to you personally. This is the heart of Ignatian contemplation.'}},
+
+{id:214,cat:'ignatian',title:'The Two Standards: Discernment of Values',era:'16th Century — Spiritual Exercises Week 2',
+narrative:'The Meditation on Two Standards — placed at the hinge of the Second Week — presents the retreatant with the two fundamental options of the interior life in sharply dramatic terms: the standard of Christ (poverty, humility, all virtues) and the standard of the Enemy (riches, honor, pride). Ignatius is not making a simplistic moral argument: he is describing two different orientations of the whole person, two different ways of being in the world. The one who follows the standard of riches and honor is not necessarily externally wealthy or proud; they may be poor and humble in external circumstances but inwardly oriented toward accumulation and recognition. The Two Standards is a meditation on the deepest structure of desire.',
+quotes:['Consider how Christ calls and wants all persons to come under his standard, and on the other hand how Lucifer calls them under his. (Ignatius, SE 137)','The first step is riches, the second honor, the third pride — and from these three steps the enemy leads to all other vices. (Ignatius, SE 142)'],
+scripture:'Matthew 6:19–21; Luke 4:5–8; Philippians 4:11–12; 1 Timothy 6:6–10; James 4:6',
+practice:{type:'Two Standards Examination',text:'Ignatius\'s question for self-examination: in my daily decisions and reactions, which standard am I actually following? Not in theory but in practice — do my choices move toward poverty, humility, and service, or toward accumulation, recognition, and control? Sit for 20 minutes with one specific area of your life and trace the movement honestly. Ignatius does not demand external poverty; he demands interior freedom from the drive to accumulate and be recognized.'}},
+
+{id:215,cat:'ignatian',title:'Election: Discerning God\'s Will',era:'16th Century — Spiritual Exercises',
+narrative:'The Election — the central goal of the full 30-day Exercises — is the moment when the exercitant, having been purified of disordered attachments and having encountered Christ deeply across the Second Week\'s meditations, is invited to make a major life decision in freedom. Ignatius offers three methods for the Election: (1) certitude — a clear divine communication leaving no doubt; (2) discernment — examining consolations and desolations over time and discerning a consistent direction; and (3) reason — using one\'s best judgment in a state of interior peace and freedom. The third method is the most commonly available, and Ignatius is remarkably practical about it: imagine yourself on your deathbed looking back, and ask what decision you would wish you had made.',
+quotes:['Imagine yourself at the point of death, and consider the decision you will wish you had made. (Ignatius, SE 186, paraphrase)','In all things, love God and then do what you will. (Attributed to Augustine — the spirit underlying Ignatian Election)'],
+scripture:'Romans 12:2; Psalm 37:4–5; Proverbs 3:5–6; Colossians 1:9; James 1:5',
+practice:{type:'Deathbed Decision',text:'For any significant decision you are currently facing: sit for 20 minutes and imagine yourself at the end of your life, looking back. Which choice do you wish you had made? Ignatius found that the deathbed perspective reliably strips away the noise of social pressure, fear, and short-term thinking, leaving the deeper values that genuinely matter. Take note of what emerges — this is data for your discernment, not a final answer.'}},
+
+{id:216,cat:'ignatian',title:'Contemplation for Divine Love: Return of All Things',era:'16th Century — Spiritual Exercises Week 4',
+narrative:'The Contemplation for Attaining Divine Love — the final exercise of the Exercises, placed after the experience of the Risen Christ — invites the exercitant to a cosmic awareness of divine love flowing through all things. Its two central insights: love is shown in deeds rather than words; and love consists in mutual sharing between the lover and the beloved. From this foundation, Ignatius leads the exercitant through four movements: recognizing God\'s gifts; recognizing God\'s presence in all created things; recognizing God as laboring in all things; and recognizing all gifts as proceeding from and pointing back to the infinite divine goodness. The prayer that concludes it — the Suscipe — is the fullest possible act of self-offering in the Ignatian tradition.',
+quotes:['Take, Lord, and receive all my liberty, my memory, my understanding, and my entire will. (Ignatius, SE 234 — the Suscipe)','Love ought to manifest itself in deeds rather than words. (Ignatius, SE 230)'],
+scripture:'1 John 4:10; Romans 11:36; Acts 17:28; John 3:16; James 2:14–17',
+practice:{type:'Suscipe',text:'Pray the Suscipe slowly: "Take, Lord, and receive all my liberty, my memory, my understanding, and my entire will — all that I have and possess. You have given all to me. To you, Lord, I return it. All is yours; dispose of it wholly according to your will. Give me your love and your grace, for this is sufficient for me." Pause on each phrase. The Suscipe is not a once-for-all prayer but a daily orientation — the Ignatian equivalent of the Carmelite fiat.'}},
+
+
+// ── PROTESTANT MYSTICISM (cat:'protestant') ──────────────────────────────
+
+{id:217,cat:'protestant',title:'Martin Luther: Theology of the Cross',era:'16th Century — Martin Luther',
+narrative:'Martin Luther (1483–1546) is not typically read as a mystic, but his theology of the cross contains one of the most powerful mystical insights in the Reformation tradition: God is found sub contraria specie — under the form of its opposite. The divine majesty hides under suffering, weakness, shame, and death. The God revealed in the crucifixion is not the God of power and beauty that natural religion seeks, but a God who has voluntarily assumed the form of ultimate defeat. For Luther, this is not merely historical information but the shape of the entire spiritual life: the soul encounters God not in its moments of spiritual success and consolation but in its poverty, failure, and darkness. The theology of the cross is a mystical theology.',
+quotes:['God can be found only in suffering and the cross. (Luther, Heidelberg Disputation, Thesis 20)','The cross alone is our theology. (Luther, WA 5:176)'],
+scripture:'1 Corinthians 1:18–25; 2 Corinthians 12:9–10; Philippians 3:10; Colossians 1:24; Isaiah 53:3',
+practice:{type:'Theology of the Cross',text:'Luther\'s contemplative challenge: identify the place in your life where you most clearly see failure, weakness, or defeat. Now apply the theology of the cross: this is where God is most likely to be found — not despite the suffering but through it, under it, hidden in it. Sit for 20 minutes with this specific place. Do not spiritualize it or explain it. Simply bring Luther\'s lens: God hides here. Ask: what is God doing in this defeat that I have not been able to see?'}},
+
+{id:218,cat:'protestant',title:'George Fox: The Inner Light',era:'17th Century — George Fox and the Quakers',
+narrative:'George Fox (1624–1691), the founder of the Religious Society of Friends (Quakers), experienced a decisive interior revelation in 1647: "There is one, even Christ Jesus, that can speak to thy condition." From this experience Fox developed a radical theology of the Inner Light: the divine light of Christ is present in every human being, regardless of outward religious status, and the task of the spiritual life is to attend to and obey this light. Quaker worship — sitting in gathered silence, waiting for the Spirit\'s movement — is the most thoroughgoing contemplative practice developed in the Protestant tradition. Fox\'s insistence that no external mediator is necessary between the soul and God was both his theological core and the source of the Quakers\' social radicalism.',
+quotes:['There is that of God in every person. (George Fox, Journal)','I saw also that there was an ocean of darkness and death, but an infinite ocean of light and love, which flowed over the ocean of darkness. (George Fox, Journal)'],
+scripture:'John 1:9; 1 John 2:27; Jeremiah 31:33–34; Hebrews 8:10–11; Romans 8:16',
+practice:{type:'Gathered Silence',text:'The Quaker practice: sit in complete silence for 20–30 minutes, without any prepared prayer, scripture reading, or directed thought. Simply wait. The tradition calls this "waiting on the Lord." Do not fill the silence — hold it open. If a word, image, or sense of guidance arises, note it but do not immediately act on it. If silence remains, receive the silence as itself a form of divine communication. Fox\'s promise: the Inner Light speaks when the outer noise ceases.'}},
+
+{id:219,cat:'protestant',title:'Jacob Böhme: The Unground and the Ground',era:'17th Century — Jacob Böhme',
+narrative:'Jacob Böhme (1575–1624) — the German Lutheran shoemaker who became one of the most theologically daring mystics in Christian history — experienced a sudden illumination in 1600 in which he saw "the being of all beings, the byss and abyss." His subsequent writings — The Aurora, The Signature of All Things, Mysterium Magnum — develop a theosophical vision of extraordinary depth and difficulty: a God who is simultaneously the Unground (the groundless, pre-personal abyss of divine potentiality) and the Ground (the self-revealing Trinity). Böhme\'s influence on subsequent Western mysticism — through William Law, William Blake, Schelling, Hegel, and ultimately Carl Jung — was enormous and often unacknowledged.',
+quotes:['In the Yes and No all things consist. (Böhme, The Signature of All Things)','The whole outer world with all its being is a signature or figure of the inner spiritual world. (Böhme, Signature of All Things 1.1)'],
+scripture:'Romans 11:33–36; Job 38:4; Isaiah 45:15; 1 Corinthians 2:10; John 1:1–5',
+practice:{type:'Signature of All Things',text:'Böhme\'s contemplative practice: attend to the physical world as a "signature" of the spiritual world — every created thing bearing the imprint of its divine origin. Take one object — a stone, a plant, a tool, an animal — and sit with it for 15 minutes, asking: what does this reveal about its maker? Not as a puzzle to solve but as a contemplative attention to how the visible carries the invisible. Böhme believed this practice of reading signatures was itself a form of prayer.'}},
+
+{id:220,cat:'protestant',title:'William Law: A Serious Call to a Devout Life',era:'1728 — William Law',
+narrative:'William Law (1686–1761), the English Non-Juror and mystic, wrote A Serious Call to a Devout and Holy Life in 1728 — a work that shaped John Wesley, Samuel Johnson, and George Whitefield, and stands as one of the most challenging confrontations with complacent Christianity ever written. Its central argument: most professing Christians live entirely differently from their professed beliefs, and this gap between profession and practice is the primary spiritual disease of the age. Law\'s later mystical writings — influenced by Jacob Böhme — develop a theology of the divine spark in the soul and the birth of the divine life in the soul that places him firmly in the mystical tradition.',
+quotes:['Devotion is neither private nor public prayer, but a life given to God. (Law, Serious Call 1)','The whole nature of the Christian religion is summed up in the single word love. (Law, Spirit of Prayer)'],
+scripture:'James 2:14–17; Matthew 7:21; Romans 12:1–2; 1 John 3:18; Luke 6:46',
+practice:{type:'Serious Call Examination',text:'Law\'s challenge: write down your three most deeply held Christian beliefs. Then, for each one, honestly describe how your daily life would look different if you genuinely believed it. The gap between the two descriptions is the specific territory of your spiritual work. Law was not trying to produce guilt — he was trying to produce honesty as the necessary precondition for genuine transformation.'}},
+
+{id:221,cat:'protestant',title:'Johann Arndt: True Christianity',era:'1605 — Johann Arndt',
+narrative:'Johann Arndt (1555–1621) — the Lutheran pastor and theologian whose True Christianity (1605) became the most widely read devotional work in the Lutheran tradition after the Bible — argued that the Reformation had successfully reformed doctrine without reforming the interior life. True Christianity, he insisted, is not correct belief but the living Christ actually dwelling in the soul — a claim that placed him in direct continuity with the medieval mystical tradition (he drew heavily on Thomas à Kempis, Tauler, and the German Theology) while remaining within the Lutheran framework. His influence on Pietism, and through Pietism on all subsequent evangelical spirituality, makes him one of the most consequential figures in Protestant spiritual history.',
+quotes:['Christianity does not consist merely in words, but in living faith, from which arise righteous fruits. (Arndt, True Christianity I.1)','Where faith is genuine and living, there Christ dwells with all His riches and gifts. (Arndt, True Christianity I.3)'],
+scripture:'Colossians 1:27; Galatians 2:20; John 15:4; 2 Corinthians 13:5; Ephesians 3:17',
+practice:{type:'Living Faith Examination',text:'Arndt\'s distinction between verbal and living faith: living faith is recognized not by its intellectual content but by its fruit — the actual transformation of character, relationship, and behavior that follows from genuine indwelling. Ask honestly: in what specific, observable way is my life different from what it would be without faith? Arndt\'s question is not accusatory but clarifying: where is the living faith actually alive in you, and where is it still merely verbal?'}},
+
+{id:222,cat:'protestant',title:'Pietism: The Warm Heart',era:'17th–18th Century — Spener, Francke, Zinzendorf',
+narrative:'Pietism — the 17th–18th century reform movement within German Lutheranism initiated by Philipp Jakob Spener\'s Pia Desideria (1675) — was a sustained attempt to recover the interior and communal dimensions of Christian life that the Reformation had emphasized in doctrine but not always in practice. Spener\'s small group meetings (collegia pietatis), Francke\'s social institutions in Halle, and Zinzendorf\'s Moravian community at Herrnhut produced an extraordinary flowering of interior piety, missionary zeal, and social engagement. The Moravian tradition — with its intense focus on the wounds of Christ, its community of prayer, and its 24-hour prayer watch that ran continuously from 1727 to 1762 — directly inspired John Wesley\'s evangelical conversion.',
+quotes:['The Holy Scriptures are the rule and standard according to which all teachers and teachings are to be measured. (Spener, Pia Desideria)','I have but one passion — it is He, it is He alone. (Count Zinzendorf, characteristic saying)'],
+scripture:'Acts 2:42–47; 1 Thessalonians 5:11; Hebrews 10:24–25; Romans 12:10; Colossians 3:16',
+practice:{type:'Small Group Prayer',text:'Spener\'s collegia pietatis: find two or three other people who share a genuine desire for interior transformation and commit to meeting weekly for prayer, scripture, and honest sharing about the interior life. Not a Bible study or a social gathering — a specific meeting for mutual encouragement in the spiritual life. Spener found that this small group structure was more transformative than any individual practice because it creates the accountability, encouragement, and witness that isolated interior practice lacks.'}},
+
+{id:223,cat:'protestant',title:'John Wesley: The Means of Grace',era:'18th Century — John Wesley',
+narrative:'John Wesley (1703–1791) — the founder of Methodism, whose heart was "strangely warmed" in a Moravian meeting in Aldersgate Street in 1738 — developed one of the most practically organized systems of spiritual formation in Protestant history. His "means of grace" — prayer, scripture, the Lord\'s Supper, fasting, and Christian conference (small group accountability) — were not optional supplements to faith but the ordinary channels through which divine grace operates in the soul. Wesley\'s genius was organizational as much as theological: he created a system of classes, bands, and societies that made disciplined spiritual formation available to ordinary working people rather than educated elites.',
+quotes:['I look upon all the world as my parish. (Wesley, Journal, June 11, 1739)','Earn all you can, save all you can, give all you can. (Wesley, Sermon 50)'],
+scripture:'Acts 2:42; Hebrews 10:24–25; Matthew 6:6; 1 Corinthians 11:26; Acts 6:4',
+practice:{type:'Methodist Accountability',text:'Wesley\'s class meeting question — asked of every member every week: "How is it with your soul?" Not how is your theology, not what have you achieved, but how is it with your soul? Find one person you trust and ask them this question — and be asked it in return — once a week for one month. Wesley discovered that this simple practice of honest mutual accountability was more transformative than most elaborate spiritual programs.'}},
+
+{id:224,cat:'protestant',title:'George MacDonald: The Grand Imagination',era:'19th Century — George MacDonald',
+narrative:'George MacDonald (1824–1905) — the Scottish Congregationalist minister, novelist, and poet who was C.S. Lewis\'s "master" (Lewis said he had never written a book without quoting him) — developed a theology of divine fatherhood and universal redemption of extraordinary warmth and depth. His fantasy novels (Phantastes, Lilith, the Princess books) are extended mystical allegories; his Unspoken Sermons contain some of the most luminous theological writing in the English language. MacDonald\'s central conviction: God will never cease pursuing every soul until every soul has been brought home — not through coercion but through love so patient and so inventive that no resistance can finally withstand it.',
+quotes:['The one principle of hell is — "I am my own." (MacDonald, Unspoken Sermons II)','It is not in the nature of love to cease from loving. (MacDonald, Unspoken Sermons)'],
+scripture:'Luke 15:4–7; Romans 11:32; 1 Corinthians 15:28; 1 Timothy 2:4; 2 Peter 3:9',
+practice:{type:'The Pursuing Love',text:'MacDonald\'s contemplation: sit for 20 minutes with the image of a love that will not cease — a divine love that is pursuing you with the creativity, patience, and inventiveness of the father of the prodigal son, multiplied to infinity. Not a love that requires your cooperation to persist, but a love that persists despite your resistance. Ask: what in my life am I still resisting that this pursuing love is patiently pressing upon? What would it feel like to stop running?'}},
+
+
+// ── WOMEN MYSTICS EXPANDED (cat:'women') ─────────────────────────────────
+
+{id:225,cat:'women',title:'Hadewijch of Antwerp: The Demand of Love',era:'13th Century — Hadewijch of Antwerp',
+narrative:'Hadewijch of Antwerp — the 13th-century Flemish Beguine whose letters, visions, and poems constitute one of the most daring bodies of mystical writing in medieval literature — developed a theology of minne (divine love) as simultaneously demanding and fulfilling beyond all other fulfillments. Her love mysticism is not sentimental: Love (with a capital L) is a feudal lord who demands everything, rewards nothing immediately, and will be satisfied with nothing less than total surrender. Hadewijch\'s letters to her community of Beguines are at once spiritual direction, theological instruction, and personal witness. Her insistence that mystical union with God involves suffering as much as joy places her in the tradition of John of the Cross centuries before him.',
+quotes:['Love\'s most intimate union is through pain. (Hadewijch, Poems in Stanzas IV)','You must learn to live with the nudeness of Love, willing to be without consolation. (Hadewijch, Letter 6)'],
+scripture:'Song of Songs 8:6–7; Romans 8:38–39; 1 John 4:18; Hosea 11:4; Jeremiah 31:3',
+practice:{type:'The Nudeness of Love',text:'Hadewijch\'s most demanding teaching: the soul called to genuine union with God must be willing to live without consolation — without the felt sweetness of divine love — while continuing to love with full intensity. Sit for 20 minutes in a period of spiritual dryness (or recall the last such period) and ask: can I love without receiving anything in return? Can I serve without consolation? Hadewijch\'s promise: the soul that persists through this desert finds on the other side a union more complete than any consolation could provide.'}},
+
+{id:226,cat:'women',title:'Angela of Foligno: The Book of Blessed Angela',era:'13th Century — Angela of Foligno',
+narrative:'Angela of Foligno (1248–1309) — the Umbrian tertiary and mystic — underwent one of the most dramatic conversions and subsequent mystical journeys recorded in the tradition. Beginning as a comfortable married woman of some wealth, Angela experienced a profound conversion following the deaths of her mother, husband, and children within a short period. Her Memorial — dictated to her Franciscan confessor Brother Arnaldo and known as The Book of Blessed Angela — describes 30 stages of spiritual growth culminating in experiences of divine darkness and nothingness that anticipate John of the Cross\'s dark night. She is one of the few women in the tradition to have received the title Doctor of the Church (2013).',
+quotes:['The whole world is pregnant with God. (Angela of Foligno, Memorial)','I found myself in the midst of the Trinity. (Angela, Memorial, describing her central mystical experience)'],
+scripture:'Colossians 1:19; John 17:21; 1 Corinthians 15:28; Ephesians 3:19; 2 Peter 1:4',
+practice:{type:'Pregnant World Contemplation',text:'Angela\'s phrase — "the whole world is pregnant with God" — is one of the most luminous in the mystical tradition. Sit for 20 minutes outdoors or near a window with a view of the natural world. Attend to what you see with Angela\'s awareness: this world, in all its ordinary materiality, is pregnant with divine presence. Not symbolically. Ontologically. Ask: if this is true, what changes in how I perceive and inhabit my daily environment?'}},
+
+{id:227,cat:'women',title:'Marie of the Incarnation: The Mystic of New France',era:'17th Century — Marie of the Incarnation',
+narrative:'Marie of the Incarnation (1599–1672) — the French Ursuline nun who became the foundational figure of Catholic Christianity in New France (Quebec) — combined one of the most intense mystical interior lives in the 17th century with an extraordinary practical engagement in cross-cultural mission. A widow with a young son, she experienced a profound awakening at 19 and eventually followed what she understood as a divine call to leave France and work among the indigenous peoples of Canada. Her spiritual autobiography and letters — over 12,000 pages of correspondence — reveal a contemplative who found no contradiction between the highest states of mystical union and the daily demands of running a school, learning indigenous languages, and navigating colonial politics.',
+quotes:['God alone suffices and is more than all things. (Marie of the Incarnation, Spiritual Autobiography)','The whole of Christianity consists in this: to know ourselves, to know God, and to unite ourselves to Him. (Marie, Spiritual Autobiography)'],
+scripture:'Philippians 4:11; Colossians 3:17; 1 Corinthians 7:17; Romans 8:28; Psalm 37:4',
+practice:{type:'Contemplative Action',text:'Marie\'s life demonstrates what the Carmelite tradition also insists: the deepest mystical union does not diminish engagement with the world but transforms its quality. Her question for those in demanding practical work: am I approaching this work from my contemplative center, or from my anxious circumference? This week, identify one demanding practical task and consciously bring it into your prayer before engaging it. Marie\'s witness: the deepest action flows from the deepest prayer.'}},
+
+{id:228,cat:'women',title:'Adrienne von Speyr: Trinitarian Mysticism',era:'20th Century — Adrienne von Speyr',
+narrative:'Adrienne von Speyr (1902–1967) — the Swiss physician and mystic who converted to Catholicism under the direction of Hans Urs von Balthasar and whose mystical experiences he considered the theological source of his own work — developed one of the most theologically sophisticated mystical theologies of the 20th century. Her understanding of prayer as participation in the Son\'s eternal relationship with the Father; her theology of the dark Saturday between Good Friday and Easter as the soul\'s participation in Christ\'s descent into hell; and her vision of the Church as the extended form of Mary\'s fiat make her one of the most original mystical theologians of her century, though her work remains less known than it deserves.',
+quotes:['Prayer is the place where heaven and earth meet. (Von Speyr, The World of Prayer)','Mary\'s fiat is the church\'s permanent posture before God. (Von Speyr, Handmaid of the Lord, paraphrase)'],
+scripture:'John 17:21; Romans 8:26; Luke 1:38; 2 Corinthians 1:3–5; Hebrews 5:7–8',
+practice:{type:'Holy Saturday Prayer',text:'Von Speyr\'s theology of Holy Saturday: the period between Good Friday and Easter — the time of God\'s apparent absence, the silence of the tomb — is not merely historical but an ongoing dimension of the spiritual life. Every soul passes through its Holy Saturday. Sit for 20 minutes in a spirit of faithful waiting rather than anxious searching, trusting that the silence of Saturday is not the absence of God but the gestation of resurrection. What in your life is currently in Holy Saturday?'}},
+
+{id:229,cat:'women',title:'Jessica Powers: The Carmelite Poet',era:'20th Century — Jessica Powers',
+narrative:'Jessica Powers (1905–1988) — the Wisconsin-born poet who entered the Carmelite Order in 1941 as Sister Miriam of the Holy Spirit — wrote some of the finest mystical poetry in the American tradition, drawing on John of the Cross, Teresa of Ávila, and her own deep prayer life. Her poems on the dark night, divine love, and contemplative surrender have been compared to those of Gerard Manley Hopkins in their intensity and precision. Almost unknown outside Catholic contemplative circles during her lifetime, her Collected Poems has found a growing readership among Christians of all traditions who recognize in her work an authentic and contemporary witness to the mystical life.',
+quotes:['I am the star of the morning, the evening star of the night, the dawn-star over your darkness. (Powers, "The Mystic")','God sits in the wound\'s center, and I learn from pain that love has depths not touched by consolation. (Powers, "The Wound of Love")'],
+scripture:'Song of Songs 2:3; Isaiah 50:10; John 12:24; Romans 8:18; 2 Corinthians 4:17',
+practice:{type:'Contemplative Poetry',text:'Obtain a copy of Jessica Powers\'s Collected Poems. Read one poem per day for a week — slowly, more than once, listening to it rather than analyzing it. The contemplative tradition has always held that poetry reaches depths that prose cannot: its compression, its imagery, its music bypasses the analytical mind and speaks directly to the contemplative heart. Ask after each reading: what has this poem shown me that I could not have seen in prose?'}},
+
+{id:230,cat:'women',title:'Dorothy Day: The Long Loneliness',era:'20th Century — Dorothy Day',
+narrative:'Dorothy Day (1897–1980) — the Catholic journalist, social activist, and co-founder of the Catholic Worker Movement — represents one of the most demanding integrations of contemplative life and radical social engagement in the modern period. Her autobiography The Long Loneliness is simultaneously a spiritual memoir and a social manifesto: Day found in the Eucharist, in the liturgy, and in a life of daily prayer the resources to sustain decades of work among the most marginalized people in American society. Her theology of the "Long Loneliness" — the human hunger for community that only love can satisfy — connects the social and the mystical: the person who genuinely encounters Christ in the Eucharist cannot fail to encounter Christ in the poor.',
+quotes:['We have all known the long loneliness and we have learned that the only solution is love and that love comes with community. (Day, The Long Loneliness)','The mystery of the poor is this: that they are Jesus, and what you do for them you do for Him. (Day, On Pilgrimage)'],
+scripture:'Matthew 25:35–40; Luke 4:18; Isaiah 58:6–7; James 2:14–17; Acts 2:44–45',
+practice:{type:'Works of Mercy',text:'Dorothy Day\'s practice: choose one of the corporal works of mercy — feeding the hungry, sheltering the homeless, visiting the sick, clothing the naked — and perform it this week in the specific awareness that the person you are serving is Christ. Not metaphorically — literally. Day\'s witness: this practice of recognition, sustained over years, is itself a form of contemplative prayer that transforms the person who practices it more profoundly than almost any interior discipline.'}},
+
+
+// ── LITURGICAL AND SACRAMENTAL (cat:'liturgical') ────────────────────────
+
+{id:231,cat:'liturgical',title:'The Eucharist: Source and Summit',era:'c. 50 AD — Christian Tradition',
+narrative:'The Eucharist — the central act of Christian worship — has been understood by the mystical tradition not merely as a memorial rite but as the primary site of divine-human encounter: the place where the soul\'s union with Christ, described in John 15 and Colossians 3, is enacted, renewed, and deepened in time. "The Eucharist is the source and summit of the Christian life" (Lumen Gentium 11) — not one devotion among many but the action that both flows from and nourishes every other dimension of the Christian life. The contemplative tradition, from Ignatius of Antioch through Augustine, Thomas Aquinas, and John Paul II, has consistently read the Eucharist as the sacrament of union: the soul becomes what it receives.',
+quotes:['You are what you eat. (Augustine, Sermon 272 — on the Eucharist)','The Eucharist contains the whole spiritual good of the Church, namely Christ himself. (Presbyterorum Ordinis 5)'],
+scripture:'John 6:51–58; 1 Corinthians 11:23–26; Luke 24:35; Matthew 26:26–28; Acts 2:42',
+practice:{type:'Eucharistic Contemplation',text:'Whether or not you receive communion regularly, spend 20 minutes in contemplation of the Eucharistic claim: God offers God\'s own self as food for the soul. The union the mystics describe in their most elevated language — the soul transformed into God, the divine life flowing through the human — is precisely what the Eucharist enacts sacramentally at every celebration. If you do receive communion, receive it this week in contemplative attention to what the action claims to accomplish.'}},
+
+{id:232,cat:'liturgical',title:'The Liturgy of the Hours: Sanctifying Time',era:'c. 200 AD — Christian Tradition',
+narrative:'The Liturgy of the Hours — the prayer of the Church distributed across the day in seven (or eight) prayer times — is the oldest and most comprehensive contemplative structure in the Christian tradition, rooted in the Jewish practice of set times of prayer that Jesus himself observed. Its purpose is the sanctification of time: the entire day, from Vigils in the deep night through Lauds at dawn, the daytime Hours, Vespers at evening, and Compline at night, is drawn into prayer. The monastic tradition built its entire life around this structure; Edith Stein understood it as participation in the continuous prayer of Christ before the Father. The Hours do not create pockets of sacred time in an otherwise secular day — they claim the entire day as sacred.',
+quotes:['Seven times a day I praise you. (Psalm 119:164)','The purpose of the Liturgy of the Hours is the sanctification of the whole of human time. (General Instruction of the Liturgy of the Hours, 10)'],
+scripture:'Psalm 119:164; Daniel 6:10; Acts 3:1; 1 Thessalonians 5:17; Psalm 55:17',
+practice:{type:'Divine Office',text:'Pray one Hour today — Morning Prayer (Lauds) or Evening Prayer (Vespers) — using a breviary or an app (iBreviary, Universalis, or Pray As You Go). The structure: opening verse, hymn, psalms with antiphons, short reading, Gospel canticle (Benedictus at Lauds, Magnificat at Vespers), intercessions, Our Father, closing prayer. The prayer takes 10–15 minutes. Edith Stein\'s insight: in praying it, you join a prayer that has been continuous for two millennia.'}},
+
+{id:233,cat:'liturgical',title:'Baptism: The Foundational Sacrament',era:'c. 30 AD — Christian Tradition',
+narrative:'Baptism — the sacrament of initiation — has been understood by the mystical tradition as the foundational ontological event of the Christian life: the moment of genuine death and resurrection in which the false self begins to give way to the true self, and the soul is grafted into the Body of Christ. Paul\'s theology of baptism in Romans 6 — "we were buried therefore with him by baptism into death, so that as Christ was raised from the dead by the glory of the Father, we too might walk in newness of life" — is the sacramental grounding of the entire mystical tradition\'s account of interior transformation. The mystics do not achieve something new; they inhabit, progressively more fully, what was given at baptism.',
+quotes:['Do you not know that all of us who have been baptized into Christ Jesus were baptized into his death? (Romans 6:3)','The whole of the spiritual life is the gradual actualization of what was given in baptism. (Jean Danielou SJ, The Bible and the Liturgy, paraphrase)'],
+scripture:'Romans 6:3–11; Galatians 3:27; Colossians 2:12; John 3:5; Acts 2:38',
+practice:{type:'Baptismal Identity',text:'Recall your own baptism — or, if you were baptized as an infant, imaginatively inhabit the claim made over you. Sit for 20 minutes with this: your deepest identity is not your personality, your achievements, your wounds, or your roles. Your deepest identity is the one given in baptism: you are "in Christ." This identity cannot be revoked, cannot be earned, and cannot be lost. Ask: what changes in how I live if I take this as my primary identity rather than any other?'}},
+
+{id:234,cat:'liturgical',title:'The Liturgical Year: Time as Spiritual Curriculum',era:'c. 100 AD — Christian Tradition',
+narrative:'The liturgical year — with its rhythms of Advent, Christmas, Epiphany, Ordinary Time, Lent, Holy Week, Easter, Pentecost, and the long season of growth — is the Church\'s most comprehensive catechetical and contemplative structure. Rather than treating time as a neutral medium through which events pass, the liturgical year claims that time itself can be sanctified: each season invites the soul into a different dimension of the mystery of Christ. Advent\'s longing, Lent\'s purification, Easter\'s transformation, Pentecost\'s outpouring — these are not merely commemorations of historical events but recurring invitations to inhabit the same interior movements in one\'s own spiritual life.',
+quotes:['The liturgical year is not a mere commemoration of past events but a living experience of them in the present. (Romano Guardini, The Spirit of the Liturgy)','We do not merely remember what Christ did; we participate in it. (Alexander Schmemann, For the Life of the World, paraphrase)'],
+scripture:'Galatians 4:4; Luke 4:21; John 2:23; Acts 2:1; Revelation 1:10',
+practice:{type:'Liturgical Attunement',text:'Identify the current liturgical season and attend to its specific invitation. Advent: wait, long, resist premature fulfillment. Lent: simplify, examine, release. Easter: receive resurrection into daily life. Ordinary Time: grow in the unglamorous consistency of discipleship. For one month, let the liturgical season shape your prayer: read the daily lectionary texts, attend to the season\'s color and mood, and ask each week — what is this season inviting me into that I have been resisting?'}},
+
+{id:235,cat:'liturgical',title:'Alexander Schmemann: For the Life of the World',era:'1963 — Alexander Schmemann',
+narrative:'Alexander Schmemann (1921–1983), the Russian Orthodox theologian and dean of St. Vladimir\'s Seminary, wrote For the Life of the World — originally a study document for an ecumenical student conference — which became one of the most widely read works of liturgical theology in the 20th century. His central thesis: the Eucharist is not a religious act separate from the world but the world\'s true life offered back to God in thanksgiving. The secular/sacred division that modern life takes for granted is, for Schmemann, the fundamental lie: there is no neutral secular reality, because all of creation is eucharistic in its nature — given by God as gift, received in thanksgiving, and transformed by that thanksgiving into communion with the divine.',
+quotes:['The world was created as the "matter" of one all-embracing eucharist. (Schmemann, For the Life of the World)','The only real fall of man was his ceasing to be hungry for God. (Schmemann, For the Life of the World)'],
+scripture:'Genesis 1:29; 1 Timothy 4:4–5; Romans 11:36; 1 Corinthians 10:31; Psalm 24:1',
+practice:{type:'Eucharistic Life',text:'Schmemann\'s practice: at each meal this week, pause before eating — not merely to "say grace" but to perform a conscious eucharistic act: receive this food as gift, offer it back to God in thanksgiving, and recognize in the act of eating a participation in the world\'s eucharistic nature. Not as a religious overlay on a secular act but as a recovery of the meal\'s deepest meaning. Schmemann: the person who can receive food with genuine thanksgiving has grasped the secret of the Kingdom.'}},
+
+{id:236,cat:'liturgical',title:'The Psalter as Daily Prayer',era:'c. 1000–400 BC — The Psalter',
+narrative:'The Rule of Benedict specifies that the entire Psalter should be prayed once per week — the monk\'s life structured around this continuous cycling through the full range of human experience before God. This insistence is not arbitrary: the Psalms are the only prayer book in history composed specifically as a complete school of prayer, covering the full range of authentic human response to God — from ecstatic praise to bitter complaint, from serene trust to rage at divine abandonment. The Psalms teach the soul to pray honestly, to bring its full reality before God rather than its sanitized version. John Calvin called the Psalter "an anatomy of all parts of the soul."',
+quotes:['In the Psalms we hear Christ praying, and we pray in Christ. (Augustine, Commentary on the Psalms)','The Psalter is a little Bible in which everything contained in the entire Bible has been summarized. (Martin Luther, Preface to the Psalter)'],
+scripture:'Psalm 22:1; 46:10; 63:1–8; 103:1–5; 139:1–18; 150:1–6; Ephesians 5:19; Colossians 3:16',
+practice:{type:'Continuous Psalmody',text:'Begin praying through the Psalter sequentially — Psalm 1, then 2, then 3 — one psalm per day. Do not choose favorite psalms; pray them in order, including the uncomfortable ones (imprecatory psalms, psalms of abandonment). The tradition\'s wisdom: the Psalms you find most difficult are usually the ones you most need. After one month (approximately Psalm 30), review: what has sequential psalmody revealed about your interior life that selective reading would have missed?'}},
+
+{id:237,cat:'liturgical',title:'Romano Guardini: The Spirit of the Liturgy',era:'1918 — Romano Guardini',
+narrative:'Romano Guardini (1885–1968) — the Italian-German Catholic theologian whose The Spirit of the Liturgy (1918) became one of the foundational texts of the 20th-century liturgical movement — argued that the liturgy is the primary school of the Christian soul: the place where the soul learns, through repeated embodied participation, the shape of the divine life. His central concept: the liturgy is "play" in the deepest sense — ordered, beautiful, purposive action that has its end in itself rather than in external utility. The soul that participates attentively in the liturgy is gradually formed by its gestures, postures, rhythms, and language into the shape of the one whose death and resurrection the liturgy enacts.',
+quotes:['The liturgy is a kind of holy play in which the soul, with the assistance of grace, is able to practice and learn the true Christian form of life. (Guardini, Spirit of the Liturgy)','The liturgy does not exist for our sakes but for God\'s sake. (Guardini, Spirit of the Liturgy, paraphrase)'],
+scripture:'Psalm 27:4; Revelation 4:8–11; Isaiah 6:3; John 4:24; Romans 12:1',
+practice:{type:'Liturgical Presence',text:'Guardini\'s practice: attend the next liturgical service you participate in with the specific intention of letting its gestures, words, and movements form you rather than merely expressing you. Do not come to get something out of it — come to be shaped by it. Stand when standing is called for; kneel when kneeling; be still when stillness is required. Guardini\'s claim: the body trained in liturgical gesture gradually forms the soul in the dispositions those gestures express.'}},
+
+{id:238,cat:'liturgical',title:'Compline: The Prayer at Night\'s Edge',era:'c. 300 AD — Monastic Tradition',
+narrative:'Compline — the final prayer of the day in the monastic tradition, prayed just before sleep — is one of the most beautiful and theologically rich of the Hours. Its central act is the examination of the day and the commendation of the self to God\'s protection through the night — a nightly practice of dying that prepares the soul for the final dying. The Nunc Dimittis (Simeon\'s prayer in Luke 2: "Now you can dismiss your servant in peace, for my eyes have seen your salvation") is the traditional Compline canticle, read each night as a rehearsal of death: I am content. I have seen enough. I am ready to be dismissed. The Compline hymn "Before the Ending of the Day" has been sung in monasteries every night for fifteen centuries.',
+quotes:['Into your hands I commend my spirit. (Psalm 31:5 — the Compline versicle)','Now, Master, you can let your servant go in peace, just as you promised. (Luke 2:29)'],
+scripture:'Psalm 31:5; Luke 2:29–32; Psalm 4:8; Psalm 91:1–4; Psalm 134',
+practice:{type:'Compline Practice',text:'Pray Compline each night for one week — the full text is available in any breviary or online. Its movements: examination of conscience, hymn, psalmody (usually Psalm 4 or 91), short reading, responsory, Nunc Dimittis, concluding prayer, and the Salve Regina. The whole prayer takes 7–10 minutes. Its gift: it creates a ritual boundary at the day\'s edge that separates wakefulness from sleep and commends what cannot be controlled to the One who holds all things through the night.'}},
+
+{id:239,cat:'liturgical',title:'The Rites of Passage: Sacramental Anthropology',era:'c. 100 AD — Christian Sacramental Tradition',
+narrative:'The seven sacraments of the Catholic and Orthodox traditions — Baptism, Confirmation/Chrismation, Eucharist, Penance/Reconciliation, Anointing of the Sick, Holy Orders, and Marriage — constitute a complete sacramental anthropology: a theology of the human person that insists every major transition of life can become a site of divine encounter. Birth and rebirth, maturation, nourishment, healing, vocation, and love are not merely natural processes but thresholds at which the divine life meets and transforms the human. The sacraments do not add something foreign to human experience — they disclose the divine dimension that was always already present in its depths.',
+quotes:['The sacraments of the New Law were instituted by Christ in order to nourish, strengthen, and express the faith. (Catechism of the Catholic Church, 1123)','Grace builds on nature. (Thomas Aquinas, the principle underlying sacramental theology)'],
+scripture:'John 20:22–23; Mark 16:16; Luke 7:44–48; James 5:14–15; Matthew 19:6',
+practice:{type:'Sacramental Awareness',text:'Review the major transitions of your own life — birth, significant passages, losses, relationships, vocational moments. Apply the sacramental lens: where in these transitions do you recognize, in retrospect, the shape of divine presence? Where were you being invited into a deeper life that you may have only partially recognized at the time? The sacramental tradition holds that grace was present in all of them — the question is whether you have eyes to see it now.'}},
+
+{id:240,cat:'liturgical',title:'The Church as Contemplative Community',era:'21st Century — A Living Synthesis',
+narrative:'The exhibition closes its sixth wing with a recognition that has run beneath every entry in this section: the contemplative life is never entirely solitary. Every mystic in this exhibition was formed by a community — a monastery, a movement, a tradition, a small group, a family of souls across time — and their deepest experience of God was inseparable from their participation in a body larger than themselves. The Church, in all its imperfection, is the primary community of contemplative formation in the Christian tradition: the place where scripture is read aloud, where the sacraments are celebrated, where the Hours are prayed, where the stories of the saints are kept alive, and where the living tradition is transmitted from generation to generation. No individual contemplative life replaces this; it requires and is nourished by it.',
+quotes:['You are the body of Christ and individually members of it. (1 Corinthians 12:27)','The Church is not a human institution with a divine dimension — it is a divine institution with a human dimension. (Henri de Lubac SJ, The Splendour of the Church, paraphrase)'],
+scripture:'1 Corinthians 12:12–27; Ephesians 4:15–16; Acts 2:42–47; Hebrews 10:24–25; Revelation 21:9–11',
+practice:{type:'Community Commitment',text:'The practice this entry offers: if you do not currently belong to a contemplative community — a church, a prayer group, a small group committed to the interior life — take one step this week toward finding one. Not a perfect community (none exists) but an imperfect one that takes prayer, scripture, and mutual formation seriously. The tradition\'s unanimous witness: the individual soul cannot sustain the contemplative life alone indefinitely. It needs a body.'}},
 
 ];
 
 const STRUCTURE = [
-  { cat:'scripture',  title:'Sacred Scripture',         desc:'The Biblical foundations of indwelling theology', count:34 },
-  { cat:'desert',     title:'Desert Fathers & Mothers', desc:'The founding laboratory of Christian contemplative practice', count:34 },
-  { cat:'medieval',   title:'Medieval Mystics',          desc:'The flowering of Western mystical theology', count:34 },
-  { cat:'carmelite',  title:'Carmelite Tradition',       desc:'Teresa, John, Lawrence, and Thérèse', count:39 },
-  { cat:'modern',     title:'Modern Contemplatives',     desc:'Merton, Keating, and the 20th-century renewal', count:49 },
+  { cat:'scripture',   title:'Sacred Scripture',             desc:'The Biblical foundations of indwelling theology',             count:34 },
+  { cat:'desert',      title:'Desert Fathers & Mothers',     desc:'The founding laboratory of Christian contemplative practice', count:34 },
+  { cat:'medieval',    title:'Medieval Mystics',             desc:'The flowering of Western mystical theology',                  count:34 },
+  { cat:'carmelite',   title:'Carmelite Tradition',          desc:'Teresa, John, Lawrence, and Thérèse',                        count:39 },
+  { cat:'modern',      title:'Modern Contemplatives',        desc:'Merton, Keating, and the 20th-century renewal',              count:49 },
+  { cat:'orthodox',    title:'Eastern Orthodox',             desc:'Symeon, Palamas, Seraphim, and the hesychast tradition',      count:10 },
+  { cat:'celtic',      title:'Celtic Christianity',          desc:'Patrick, Columba, Brigid, and the tradition of thin places',  count:8  },
+  { cat:'ignatian',    title:'Ignatian Tradition',           desc:'The Spiritual Exercises and finding God in all things',       count:8  },
+  { cat:'protestant',  title:'Protestant Mysticism',         desc:'Luther, Fox, Böhme, and the warm-heart tradition',           count:8  },
+  { cat:'women',       title:'Women Mystics',                desc:'Hadewijch, Angela, Marie, Adrienne, Jessica, Dorothy',       count:6  },
+  { cat:'liturgical',  title:'Liturgical & Sacramental',    desc:'Eucharist, Hours, liturgical year, and sacramental life',    count:10 },
 ];
 
 let currentFilter = 'all';
@@ -1926,6 +2420,127 @@ const SUGGESTIONS = [
   'I want to deepen my prayer life',
   'I am facing a major decision',
 ];
+
+
+// ── TIMELINE ──────────────────────────────────────────────────────────────
+
+// Each entry needs a sortYear for chronological ordering.
+// We parse the era string to extract a year.
+function parseEraYear(era) {
+  // Look for patterns like "c. 850 BC", "4th Century", "1522", "20th Century", etc.
+  const bcMatch = era.match(/(\d+)\s*BC/i);
+  if (bcMatch) return -parseInt(bcMatch[1]);
+  const yearMatch = era.match(/\b(\d{3,4})\b/);
+  if (yearMatch) return parseInt(yearMatch[1]);
+  const centuryMatch = era.match(/(\d+)(st|nd|rd|th)\s+[Cc]entury/);
+  if (centuryMatch) return (parseInt(centuryMatch[1]) - 1) * 100 + 50;
+  // "c. 300 AD" style
+  const adMatch = era.match(/c\.?\s*(\d+)/);
+  if (adMatch) return parseInt(adMatch[1]);
+  return 1500; // fallback
+}
+
+// Era bucket labels
+function getEraBucket(year) {
+  if (year < 0)       return { key: 'bc',         label: 'Before Christ' };
+  if (year < 100)     return { key: 'apostolic',   label: 'Apostolic Age (1–100)' };
+  if (year < 400)     return { key: 'patristic',   label: 'Early Church (100–400)' };
+  if (year < 700)     return { key: 'late-patr',   label: 'Late Patristic (400–700)' };
+  if (year < 1000)    return { key: 'early-med',   label: 'Early Medieval (700–1000)' };
+  if (year < 1300)    return { key: 'high-med',    label: 'High Medieval (1000–1300)' };
+  if (year < 1500)    return { key: 'late-med',    label: 'Late Medieval (1300–1500)' };
+  if (year < 1700)    return { key: 'early-mod',   label: 'Reformation Era (1500–1700)' };
+  if (year < 1850)    return { key: 'enlighten',   label: 'Enlightenment Era (1700–1850)' };
+  if (year < 1950)    return { key: 'modern',      label: 'Modern Era (1850–1950)' };
+  return               { key: 'contemp',            label: 'Contemporary (1950–Present)' };
+}
+
+function buildTimeline() {
+  // Annotate entries with sort year
+  const annotated = ENTRIES.map(e => ({
+    ...e,
+    sortYear: parseEraYear(e.era),
+    bucket: getEraBucket(parseEraYear(e.era))
+  })).sort((a, b) => a.sortYear - b.sortYear);
+
+  // Build era filter buttons
+  const seen = new Set();
+  const buckets = [];
+  annotated.forEach(e => {
+    if (!seen.has(e.bucket.key)) {
+      seen.add(e.bucket.key);
+      buckets.push(e.bucket);
+    }
+  });
+  const filterEl = document.getElementById('tl-era-filter');
+  filterEl.innerHTML = '<button class="tl-era-btn active" data-filter="all" onclick="filterTimeline(\'all\',this)">All Eras</button>';
+  buckets.forEach(b => {
+    filterEl.innerHTML += `<button class="tl-era-btn" data-filter="${b.key}" onclick="filterTimeline('${b.key}',this)">${b.label}</button>`;
+  });
+
+  // Render axis
+  renderTimelineAxis(annotated, 'all');
+  window._tlAnnotated = annotated;
+}
+
+function renderTimelineAxis(annotated, bucketFilter) {
+  const axis = document.getElementById('timeline-axis');
+  // Group by bucket
+  const groups = {};
+  annotated.forEach(e => {
+    if (bucketFilter !== 'all' && e.bucket.key !== bucketFilter) return;
+    if (!groups[e.bucket.key]) groups[e.bucket.key] = { label: e.bucket.label, entries: [] };
+    groups[e.bucket.key].entries.push(e);
+  });
+
+  axis.innerHTML = Object.values(groups).map(g => `
+    <div class="tl-era-group" data-bucket="${g.entries[0]?.bucket?.key}">
+      <div class="tl-era-label">${g.label}</div>
+      <div class="tl-entries">
+        ${g.entries.map(e => {
+          const color = CATS[e.cat]?.color || '#888';
+          const catLabel = CATS[e.cat]?.label || e.cat;
+          return `<div class="tl-entry" onclick="openModal(${e.id})">
+            <div class="tl-dot" style="background:${color}"></div>
+            <span class="tl-num">${String(e.id).padStart(2,'0')}</span>
+            <div class="tl-info">
+              <div class="tl-title">${e.title}</div>
+              <div class="tl-era-text">${e.era}</div>
+            </div>
+            <span class="tl-cat-badge" style="background:${color}22;color:${color}">${catLabel}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterTimeline(bucketKey, btn) {
+  document.querySelectorAll('.tl-era-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (window._tlAnnotated) renderTimelineAxis(window._tlAnnotated, bucketKey);
+}
+
+function showTimeline() {
+  // Deactivate all nav buttons
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.timeline-btn').classList.add('active');
+
+  // Hide grid, show timeline
+  document.getElementById('grid').style.display = 'none';
+  document.getElementById('timeline-panel').classList.add('active');
+
+  if (!window._tlAnnotated) buildTimeline();
+}
+
+// Patch filter() to hide timeline when a category is clicked
+const _origFilter = filter;
+function filter(cat, btn) {
+  document.getElementById('timeline-panel').classList.remove('active');
+  document.getElementById('grid').style.display = '';
+  _origFilter(cat, btn);
+}
+// ─────────────────────────────────────────────────────────────────────────
 
 function toggleChat() {
   chatOpen = !chatOpen;
