@@ -245,6 +245,73 @@
     #modal-body { padding: 1.4rem 1.3rem 1.8rem; }
     h1 { font-size: 2rem; }
   }
+
+  /* ── EMAIL GATE ── */
+  #gate-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(4,3,10,0.97);
+    backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+    padding: 2rem;
+    animation: fadeIn 0.35s ease;
+  }
+  #gate-overlay.open { display: flex; }
+  #gate-box {
+    background: #0d0b18;
+    border: 1px solid rgba(201,168,76,0.25);
+    max-width: 480px; width: 100%;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    animation: slideUp 0.3s ease;
+  }
+  .gate-ornament { color: var(--gold); opacity: 0.5; letter-spacing: 0.5rem; font-size: 0.9rem; margin-bottom: 1.8rem; }
+  .gate-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 300; color: #ede4d0;
+    line-height: 1.2; margin-bottom: 1rem;
+  }
+  .gate-body {
+    font-size: 0.95rem; line-height: 1.8;
+    color: #a09484; font-style: italic;
+    margin-bottom: 2rem;
+  }
+  #gate-form { display: flex; flex-direction: column; gap: 0.75rem; }
+  #gate-email {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    text-align: center;
+  }
+  #gate-email::placeholder { color: #5a5248; }
+  #gate-email:focus { border-color: rgba(201,168,76,0.45); }
+  #gate-submit {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.45);
+    color: var(--gold);
+    padding: 0.75rem 1rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.85rem; letter-spacing: 0.18em;
+    text-transform: uppercase; cursor: pointer;
+    transition: background 0.2s;
+  }
+  #gate-submit:hover { background: rgba(201,168,76,0.18); }
+  #gate-submit:disabled { opacity: 0.5; cursor: default; }
+  #gate-msg { font-size: 0.85rem; color: #a09484; min-height: 1.2rem; }
+  .gate-skip {
+    margin-top: 1.4rem;
+    font-size: 0.75rem; letter-spacing: 0.12em;
+    color: #3e3a32; text-transform: uppercase;
+    cursor: pointer; transition: color 0.2s;
+    background: none; border: none;
+  }
+  .gate-skip:hover { color: #5a5248; }
 </style>
 </head>
 <body>
@@ -1179,6 +1246,7 @@ function openModal(id) {
   document.getElementById('modal-practice-type').style.color = color;
   document.getElementById('modal-practice-type').textContent = `Contemplative Practice · ${e.practice.type}`;
   document.getElementById('modal-practice-text').textContent = e.practice.text;
+  checkGate();
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -1201,8 +1269,100 @@ function toggleIntro() {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+
+// ── EMAIL GATE ────────────────────────────────────────────────────────────
+const GATE_TRIGGER = 3;
+let entriesOpened = 0;
+let gateShown = false;
+let gatePassed = sessionStorage.getItem('gate_passed') === 'true';
+
+function checkGate() {
+  if (gatePassed || gateShown) return;
+  entriesOpened++;
+  if (entriesOpened >= GATE_TRIGGER) {
+    gateShown = true;
+    document.getElementById('gate-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+async function gateSubmit() {
+  const email = document.getElementById('gate-email').value.trim();
+  const msg = document.getElementById('gate-msg');
+  const btn = document.getElementById('gate-submit');
+
+  if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+    msg.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  btn.disabled = true;
+  msg.textContent = 'One moment...';
+
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      msg.style.color = '#C9A84C';
+      msg.textContent = 'Welcome. The exhibition is yours.';
+      sessionStorage.setItem('gate_passed', 'true');
+      gatePassed = true;
+      setTimeout(gateClose, 1400);
+    } else {
+      msg.textContent = data.error || 'Something went wrong. Please try again.';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    msg.textContent = 'Network error. Please try again.';
+    btn.disabled = false;
+  }
+}
+
+function gateSkip() {
+  sessionStorage.setItem('gate_passed', 'true');
+  gatePassed = true;
+  gateClose();
+}
+
+function gateClose() {
+  const overlay = document.getElementById('gate-overlay');
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity 0.4s ease';
+  setTimeout(() => {
+    overlay.classList.remove('open');
+    overlay.style.opacity = '';
+    overlay.style.transition = '';
+    document.body.style.overflow = '';
+  }, 400);
+}
+// ─────────────────────────────────────────────────────────────────────────
+
 renderGrid('all');
 renderStructure();
 </script>
+
+<!-- EMAIL GATE -->
+<div id="gate-overlay">
+  <div id="gate-box">
+    <div class="gate-ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <h2 class="gate-title">Continue the Journey</h2>
+    <p class="gate-body">
+      You have opened three entries. To continue exploring the exhibition,
+      leave your email below. You will occasionally receive contemplative
+      pointers drawn from this tradition.
+    </p>
+    <div id="gate-form">
+      <input type="email" id="gate-email" placeholder="your@email.com" autocomplete="email" />
+      <button id="gate-submit" onclick="gateSubmit()">Enter the Exhibition →</button>
+      <div id="gate-msg"></div>
+    </div>
+    <button class="gate-skip" onclick="gateSkip()">Continue without subscribing</button>
+  </div>
+</div>
+
 </body>
 </html>
