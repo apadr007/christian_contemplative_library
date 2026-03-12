@@ -323,6 +323,180 @@
     background: none; border: none;
   }
   .gate-skip:hover { color: #5a5248; }
+
+  /* ── CHATBOT ── */
+  #chat-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 200;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.45);
+    color: var(--gold);
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  #chat-btn:hover { background: rgba(201,168,76,0.22); transform: scale(1.07); }
+
+  #chat-panel {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    z-index: 200;
+    width: min(420px, calc(100vw - 2rem));
+    max-height: 70vh;
+    background: #0d0b18;
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.7);
+    transform: translateY(16px) scale(0.97);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+  #chat-panel.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0) scale(1);
+  }
+
+  #chat-header {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .chat-header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-weight: 400;
+    color: var(--gold); letter-spacing: 0.06em;
+  }
+  .chat-header-sub {
+    font-size: 0.72rem; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-top: 0.1rem;
+  }
+  #chat-close {
+    background: none; border: none;
+    color: var(--text-muted); font-size: 1.1rem;
+    cursor: pointer; padding: 0.2rem;
+    transition: color 0.15s;
+  }
+  #chat-close:hover { color: var(--text); }
+
+  #chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex; flex-direction: column; gap: 0.85rem;
+    scroll-behavior: smooth;
+  }
+  #chat-messages::-webkit-scrollbar { width: 4px; }
+  #chat-messages::-webkit-scrollbar-track { background: transparent; }
+  #chat-messages::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
+
+  .chat-msg {
+    max-width: 90%;
+    font-size: 0.9rem; line-height: 1.65;
+    animation: fadeIn 0.2s ease;
+  }
+  .chat-msg.user {
+    align-self: flex-end;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 0.6rem 0.85rem;
+    color: var(--text);
+  }
+  .chat-msg.assistant {
+    align-self: flex-start;
+    color: var(--text-dim);
+  }
+  .chat-msg.assistant strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .chat-msg.assistant em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .chat-suggestion {
+    display: inline-block;
+    margin: 0.15rem 0.2rem 0.15rem 0;
+    padding: 0.3rem 0.7rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.78rem; color: var(--text-muted);
+    cursor: pointer; transition: border-color 0.15s, color 0.15s;
+    font-family: 'EB Garamond', serif;
+  }
+  .chat-suggestion:hover { border-color: var(--gold-dim); color: var(--text); }
+
+  .chat-entry-link {
+    display: block;
+    margin: 0.4rem 0;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid var(--gold-dim);
+    font-size: 0.82rem; color: var(--text-dim);
+    cursor: pointer; transition: background 0.15s, border-color 0.15s;
+  }
+  .chat-entry-link:hover { background: rgba(201,168,76,0.07); border-color: var(--gold); color: var(--text); }
+  .chat-entry-link .link-num { color: var(--gold); font-size: 0.72rem; margin-right: 0.4rem; }
+
+  .chat-typing {
+    align-self: flex-start;
+    color: var(--text-muted);
+    font-size: 0.82rem; font-style: italic;
+    animation: pulse 1.2s ease infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  #chat-input-row {
+    display: flex; gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+  }
+  #chat-input {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 0.55rem 0.8rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.9rem;
+    outline: none;
+    resize: none;
+    transition: border-color 0.2s;
+    line-height: 1.4;
+    min-height: 38px; max-height: 100px;
+  }
+  #chat-input:focus { border-color: rgba(201,168,76,0.35); }
+  #chat-input::placeholder { color: var(--text-muted); }
+  #chat-send {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.35);
+    color: var(--gold);
+    padding: 0.55rem 0.9rem;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.8rem; letter-spacing: 0.12em;
+    text-transform: uppercase; cursor: pointer;
+    transition: background 0.2s;
+    align-self: flex-end;
+  }
+  #chat-send:hover { background: rgba(201,168,76,0.18); }
+  #chat-send:disabled { opacity: 0.4; cursor: default; }
+
+  @media (max-width: 560px) {
+    #chat-panel { bottom: 5.5rem; right: 0.75rem; width: calc(100vw - 1.5rem); }
+    #chat-btn { bottom: 1.2rem; right: 1.2rem; }
+  }
+
 </style>
 </head>
 <body>
@@ -1738,6 +1912,157 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 
 
 
+
+// ── CHATBOT ──────────────────────────────────────────────────────────────
+let chatOpen = false;
+let chatHistory = [];
+const SUGGESTIONS = [
+  'I feel spiritually dry and empty',
+  'I struggle with anxiety and need to let go',
+  'I am grieving and don't know how to pray',
+  'I am burned out and can't slow down',
+  'I feel distant from God',
+  'I keep falling into the same patterns',
+  'I want to deepen my prayer life',
+  'I am facing a major decision',
+];
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chat-panel').classList.toggle('open', chatOpen);
+  if (chatOpen && chatHistory.length === 0) initChat();
+  if (chatOpen) setTimeout(() => document.getElementById('chat-input').focus(), 250);
+}
+
+function initChat() {
+  const msgs = document.getElementById('chat-messages');
+
+  // Welcome message
+  appendMsg('assistant', `Welcome. I am a guide to this exhibition of 190 contemplative entries drawn from twenty centuries of Christian mystical tradition.<br><br>Tell me what you are carrying — a struggle, a question, a season of life — and I will point you toward the figures and practices in this library that speak most directly to it.`);
+
+  // Suggestion chips
+  const chipWrap = document.createElement('div');
+  chipWrap.className = 'chat-msg assistant';
+  chipWrap.style.alignSelf = 'flex-start';
+  chipWrap.innerHTML = '<span style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:0.4rem;">Or choose a starting point:</span>' +
+    SUGGESTIONS.map(s => `<button class="chat-suggestion" onclick="usesuggestion(this,'${s.replace(/'/g,"\'")}')">${s}</button>`).join('');
+  msgs.appendChild(chipWrap);
+  scrollChat();
+}
+
+function usesuggestion(btn, text) {
+  btn.closest('.chat-msg').remove();
+  document.getElementById('chat-input').value = text;
+  sendChat();
+}
+
+function appendMsg(role, html) {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+  div.innerHTML = html;
+  msgs.appendChild(div);
+  scrollChat();
+  return div;
+}
+
+function scrollChat() {
+  const msgs = document.getElementById('chat-messages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('chat-send').disabled = true;
+
+  // Remove suggestion chips if still present
+  document.querySelectorAll('.chat-suggestion').forEach(el => {
+    el.closest('.chat-msg')?.remove();
+  });
+
+  appendMsg('user', escHtml(text));
+
+  chatHistory.push({ role: 'user', content: text });
+
+  // Typing indicator
+  const typing = appendMsg('assistant', '<span class="chat-typing">Searching the tradition…</span>');
+
+  try {
+    // Build a compact index of all entries for the system prompt
+    const entryIndex = ENTRIES.map(e =>
+      `[${e.id}] "${e.title}" (${e.cat}, ${e.era}) — ${e.narrative.slice(0,120)}...`
+    ).join('\n');
+
+    const res = await fetch('/api/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: chatHistory,
+        entryIndex
+      })
+    });
+
+    const data = await res.json();
+    typing.remove();
+
+    if (!res.ok) throw new Error(data.error || 'Request failed');
+
+    const reply = data.reply;
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    // Render reply — parse [ID] references into clickable entry links
+    const rendered = renderReply(reply);
+    appendMsg('assistant', rendered);
+
+  } catch (err) {
+    typing.remove();
+    appendMsg('assistant', '<span style="color:#9B5070">Something went wrong. Please try again.</span>');
+    chatHistory.pop();
+  }
+
+  document.getElementById('chat-send').disabled = false;
+  document.getElementById('chat-input').focus();
+}
+
+function renderReply(text) {
+  // Convert markdown-style **bold** and *italic*
+  let html = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br>');
+
+  // Convert [ID] references to clickable links
+  html = html.replace(/\[([0-9]+)\]/g, (match, id) => {
+    const entry = ENTRIES.find(e => e.id === parseInt(id));
+    if (!entry) return match;
+    return `<button class="chat-entry-link" onclick="openEntryFromChat(${id})">
+      <span class="link-num">${String(id).padStart(2,'0')}</span>${entry.title}
+    </button>`;
+  });
+
+  return html;
+}
+
+function openEntryFromChat(id) {
+  openModal(id);
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+// ─────────────────────────────────────────────────────────────────────────
+
 renderGrid('all');
 renderStructure();
 </script>
@@ -1759,6 +2084,27 @@ renderStructure();
       <div id="gate-msg"></div>
     </div>
     <button class="gate-skip" onclick="gateSkip()">Continue without subscribing</button>
+  </div>
+</div>
+
+
+<!-- CHATBOT -->
+<button id="chat-btn" onclick="toggleChat()" title="Ask the Curator">✦</button>
+
+<div id="chat-panel">
+  <div id="chat-header">
+    <div>
+      <div class="chat-header-title">Ask the Curator</div>
+      <div class="chat-header-sub">190 Contemplative Entries</div>
+    </div>
+    <button id="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div id="chat-messages"></div>
+  <div id="chat-input-row">
+    <textarea id="chat-input" placeholder="Describe what you are facing..." rows="1"
+      oninput="autoResize(this)"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+    <button id="chat-send" onclick="sendChat()">Send</button>
   </div>
 </div>
 
